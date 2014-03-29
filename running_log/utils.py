@@ -1,45 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-    forms.py
-    ~~~~~~~~
+    __init__.py
+    ~~~~~~~~~~~
 
     :author: Ryan Olson
     :copyright: (c) 2013 by Ryan Olson
     :license: GPLv3, see LICENSE for more details.
 """
 import arrow
-from flask.ext.wtf import Form
-from flask_security.forms import RegisterForm
-from wtforms.fields import TextField, BooleanField, IntegerField, SubmitField
-from wtforms.fields import HiddenField, DateField
-from wtforms.validators import Required
 
-class ExtendedRegisterForm(RegisterForm):
-    first_name = TextField('First Name', [Required()])
-    last_name = TextField('Last Name', [Required()])
-    johnnie_cc = BooleanField()
-    graduation_year = IntegerField()
-
-
-class RunEntryForm(Form):
-    date_str = HiddenField('Date', [Required()])
-    date = DateField()
-    miles = IntegerField('Miles', [Required()])
-    submit = SubmitField('Save')
-
-    def validate(self):
-        if not super(RunEntryForm, self).validate():
-            return False
-
-        date = date_from_string(self.date_str.data.strip())
-        if not is_date_editable(date):
-            self.date.errors.append('date not editable')
-            return False
-        
-        return True
-
-
-def start_of_this_week():
+def start_of_this_week():                                                                                                                                                                                          
     """Sunday marks the start of the Tim Miles running calendar."""
     today = arrow.utcnow().to('America/Chicago').floor('day')
     if today.weekday() == 6:

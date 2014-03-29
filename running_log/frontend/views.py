@@ -14,6 +14,7 @@ from flask.ext.security import current_user
 from werkzeug.local import LocalProxy
 
 from ..forms import RunEntryForm
+from ..utils import this_week
 
 # Extensions
 _social = LocalProxy(lambda: current_app.extensions['social'])
@@ -31,7 +32,8 @@ def index():
 @login_required
 def miles():
     run_entry_form = RunEntryForm()
-    return render_template('frontend/miles.html', run_entry_form=run_entry_form)
+    return render_template('frontend/miles.html', this_week=this_week(),
+            run_entry_form=run_entry_form)
 
 @frontend.route('/profile')
 @login_required
