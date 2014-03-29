@@ -1,0 +1,58 @@
+COMMON: &common
+  
+  # Flask
+  DEBUG: False
+  TESTING: False
+  SECRET_KEY: 'super-secret-key'
+
+  # CouchDB
+  COUCHDB_SERVER: 'http://127.0.0.1:5984'
+  COUCHDB_DATABASE: 'project_name'
+
+  # MongoDB
+  MONGODB_DB: 'project_name'
+  MONGODB_HOST: '127.0.0.1'
+  MONGODB_PROT: 27017
+
+  # Flask-Bootstrap3
+  USE_CDN: False
+
+  # Flask-Babel
+  BABEL_DEFAULT_LOCALE: 'en'
+  BABEL_DEFAULT_TIMEZONE: 'America/Denver'
+
+  # Addons
+  SENTRY_DSN: ''
+  MIXPANEL_TOKEN: ''
+
+  # Clapp-Login / Flask-Security
+  SECURITY_TRACKALBE: True
+  SECURITY_POST_LOGIN_VIEW: '/'
+  SOCIAL_CONNECT_ALLOW_VIEW: '/'
+
+  # Flask-Security Connections
+
+  SOCIAL_FACEBOOK:
+    consumer_key: ''
+    consumer_secret: ''
+    request_token_params:
+      scope: 'email'
+
+  SOCIAL_GITHUB:
+    consumer_key: ''
+    consumer_secret: ''
+    module: 'app.github'
+
+  SOCIAL_GOOGLE:
+    consumer_key: ''
+    consumer_secret: ''
+
+
+DEVELOPMENT: &development
+  <<: *common
+  DEBUG: True
+
+PRODUCTION: &production
+  <<: *common
+  SECURITY_PASSWORD_HASH: bcrypt
+  SOCIAL_APP_URL: http://project_name.com

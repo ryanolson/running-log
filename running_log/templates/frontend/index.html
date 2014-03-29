@@ -1,0 +1,27 @@
+{% set page_title = 'Project Name' %}
+{% extends 'layouts/base.html' %}
+{% from "bootstrap/macros.html" import simple_panel %}
+
+{% block body %}
+<div class="jumbotron">
+  <h1>Tim Miles Running Log</h1>
+  <p>Super awesome tagline for your amazing project ... </p>
+</div>
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-6">
+    {% call simple_panel("Panel 1", category='info') %}
+    <ul>
+        <li>Panel 1</li>
+    </ul>
+    {% endcall %}
+  </div>
+  <div class="col-xs-12 col-sm-12 col-md-6">
+    {% call simple_panel("Panel 2", category='info') %}
+    <ul>
+        <li>Panel 2</li>
+    </ul>
+    {% endcall %}
+  </div>
+</div>
+
+{% endblock %}

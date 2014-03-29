@@ -1,0 +1,74 @@
+{# should extend the users default base, not clapp base #}
+{% extends "clapp/base.html" %}
+{% from "macros/forms.html" import render_input_field_with_popover_errors as render_field %}
+
+{% macro social_login(provider_id, display_name) %}
+  <form class="form form-social" action="{{ url_for('social.login', provider_id=provider_id) }}" method="POST">
+    <button type="submit" class="btn btn-lg btn-primary btn-block">Login with {{ display_name }}</button>
+  </form>
+{% endmacro %}
+
+{% block css %}
+{{ super() }}
+<style>
+body {                                                                                                                                                                                                             
+}
+.top-buffer {
+  padding-top: 40px;
+}
+.well {
+   margin-top: 10px;
+}
+.form-social {
+   margin-top: 10px;
+}
+.login-content {
+    max-width: 330px;
+    padding: 5px;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="top-buffer hidden-xs"></div>
+<div class="row">
+    <div class="login-content center-block">
+
+<!-- Login Content -->
+<h3 class="text-center">Login to Tim Miles Running Log</h3>
+<hr>
+<ul class="nav nav-tabs" id="login-tabs">
+  <li class="active"><a href="#login-password" data-toggle="tab">User/Password</a></li>
+  <li><a href="#login-social" data-toggle="tab">Password-less (Cool!)</a></li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane fade in active" id="login-password">
+        <form class="form-signin well" method="POST" action="{{ url_for('security.login') }}">
+            {{ login_user_form.hidden_tag() }}
+            {{ render_field(login_user_form.email) }}
+            {{ render_field(login_user_form.password) }}
+            {{ login_user_form.submit(class="btn btn-lg btn-primary btn-block") }}
+            <label class="checkbox">
+                {{ login_user_form.remember }} Remember me
+            </label>
+        </form>
+    </div>
+    <div class="tab-pane fade" id="login-social">
+        <div class="well">
+            {{ social_login('facebook', 'Facebook') }}
+            {{ social_login('github', 'Github') }}
+        </div>
+    </div>
+</div>
+<!-- End Login -->
+
+    </div>
+</div>
+{% endblock %}
+
+{% block js_btm %}
+{{ super() }}
+<script>
+    $('.input-popover').popover();
+</script>
+{% endblock %}

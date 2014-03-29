@@ -1,0 +1,45 @@
+# -*- coding: utf-8 -*-
+"""
+    mongo.py
+    ~~~~~~~~
+
+    :author: Ryan Olson
+    :copyright: (c) 2013 by Ryan Olson
+    :license: GPLv3, see LICENSE for more details.
+"""
+from flask.ext.security import RoleMixin, UserMixin
+from ..extensions import db
+
+
+class Role(db.Document, RoleMixin):
+    name = db.StringField(max_length=80, unique=True)
+    description = db.StringField(max_length=255)
+
+
+class User(db.Document, UserMixin):
+    email = db.StringField(max_length=255)
+    password = db.StringField(max_length=255)
+    active = db.BooleanField(default=True)
+    confirmed_at = db.DateTimeField()
+    roles = db.ListField(db.ReferenceField(Role), default=[])
+
+    @property
+    def connections(self):
+        return Connection.objects(user_id=str(self.id))
+
+class Connection(db.Document):
+    user_id = db.ObjectIdField()
+    provider_id = db.StringField(max_length=255)
+    provider_user_id = db.StringField(max_length=255)
+    access_token = db.StringField(max_length=255)
+    secret = db.StringField(max_length=255)
+    display_name = db.StringField(max_length=255)
+    full_name = db.StringField(max_length=255)
+    profile_url = db.StringField(max_length=255)
+    image_url = db.StringField(max_length=255)
+    rank = db.IntField(default=1)
+
+    @property
+    def user(self):
+        return User.objects(id=self.user_id).first()
+

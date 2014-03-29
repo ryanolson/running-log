@@ -1,0 +1,103 @@
+{% set page_title = 'Miles' %}
+{% extends 'layouts/base.html' %}
+
+{% macro miles_panel(d, dt, miles, edit=True) %}
+<div class="miles-panel col-xs-3 col-sm-1">
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title text-center">{{d}}</h3>
+  </div>
+  <div class="panel-body text-center distance" {% if edit %}id="{{dt}}" day="{{d}}"{% endif %}>
+    {{miles}}
+  </div>
+  <div class="panel-footer text-center">
+    {{dt}}
+  </div>
+</div>
+</div>
+{% endmacro %}
+
+{% block css %}
+{{ super() }}
+<style>
+.miles-panel {
+    min-width: 80px;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+.distance {
+    font-size: xx-large;
+}
+.panel-footer {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.panel-heading {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+.form-inline {
+    display: inline-block;
+}
+input#submit {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+<div class="hidden-xs col-sm-1 col-md-2"></div>
+{{ miles_panel("Sun", "1/1/14", 0) }}
+{{ miles_panel("Mon", "11/20/14", 3) }}
+{{ miles_panel("Tues", "11/12/14", 3) }}
+{{ miles_panel("Wed", "1/2/14", 3) }}
+{{ miles_panel("Thurs", "1/2/14", 3) }}
+{{ miles_panel("Fri", "1/2/14", 3) }}
+{{ miles_panel("Sat", "1/2/14", 3) }}
+{{ miles_panel("Total","Week", 66, edit=False) }}
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="enter_miles" tabindex="-1" role="dialog" aria-labelledby="enter_miles_label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="enter_miles_label"></h4>
+      </div>
+      <div class="modal-body">
+          <form class="form-inline" role="form">
+              {{ run_entry_form.hidden_tag() }}
+              <div class="form-group col-xs-9 col-md-9">
+                  {{ run_entry_form.miles.label(class='sr-only') }}
+                  <div class="input-group input-group-lg">
+                      {{ run_entry_form.miles(class='form-control text-right', type='text') }}
+                      <span class="input-group-addon">miles</span>
+                  </div>
+              </div>
+              {{ run_entry_form.submit(class="btn btn-lg btn-primary col-xs-3 col-md-3") }}
+          </form>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js_btm %}
+{{ super() }}
+<script>
+$('.panel-body').click(function() {
+    console.log("bitchin");
+    console.log($(this));
+    $('.modal-title').text($(this).attr('day') + ' ' + $(this).attr('id'));
+    console.log($('input#miles'));
+    $('input#miles').attr('value', parseInt($(this).text()));
+    if($(this).context.id) {
+        $('#enter_miles').modal('show');
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "clapp/base.html" %}
+
+{% block title %}Tim Miles Running Log{% endblock %}
+
+{% block css %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/running_log.css') }}">
+{% endblock %}
+
+{% block topbar %}
+{% include "includes/navbar.html" ignore missing %}
+{% endblock %}
+
+{% block footer %}
+{% include "includes/footer.html" ignore missing %}
+{% endblock %}
