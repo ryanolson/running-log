@@ -31,10 +31,10 @@ class RunEntryForm(Form):
         if not super(RunEntryForm, self).validate():
             return False
 
-        date = date_from_string(self.date_str.data.strip())
-        if not is_date_editable(date):
-            self.date.errors.append('date not editable')
-            return False
+#       date = date_from_string(self.date_str.data.strip())
+#       if not is_date_editable(date):
+#           self.date.errors.append('date not editable')
+#           return False
         
         return True
 

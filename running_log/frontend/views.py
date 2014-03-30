@@ -8,7 +8,7 @@
     :license: GPLv3, see LICENSE for more details.
 """
 from flask import Blueprint, render_template, redirect, session, current_app
-from flask import request, url_for
+from flask import request, url_for, jsonify
 from flask.ext.login import login_user, logout_user, login_required
 from flask.ext.security import current_user
 from werkzeug.local import LocalProxy
@@ -40,7 +40,21 @@ def miles():
 @frontend.route('/run', methods=['POST'])
 @login_required
 def run():
-    raise Exception
+    form_class = RunEntryForm
+    if request.form:
+        form = form_class(request.form)
+    elif request.json:
+        raise Exception
+    else:
+        raise Exception
+
+    if form.validate_on_submit():
+        print "woot! validated"
+    else:
+        print "der, form does not validate"
+
+    return render_template('frontend/run_entry_dialog.html',
+            run_entry_form=form)
 
 @frontend.route('/profile')
 @login_required
