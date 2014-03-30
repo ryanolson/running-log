@@ -32,8 +32,15 @@ def index():
 @login_required
 def miles():
     run_entry_form = RunEntryForm()
-    return render_template('frontend/miles.html', this_week=this_week(),
+    run_entry_dialog = render_template('frontend/run_entry_dialog.html', 
             run_entry_form=run_entry_form)
+    return render_template('frontend/miles.html', this_week=this_week(),
+            run_entry_dialog=run_entry_dialog)
+
+@frontend.route('/run', methods=['POST'])
+@login_required
+def run():
+    raise Exception
 
 @frontend.route('/profile')
 @login_required

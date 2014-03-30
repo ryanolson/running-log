@@ -1,22 +1,6 @@
 {% set page_title = 'Miles' %}
 {% extends 'layouts/base.html' %}
 
-{# macro miles_panel(day, miles, edit=True) %}
-<div class="miles-panel col-xs-3 col-sm-1">
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title text-center">{{ day.format('ddd') }}</h3>
-  </div>
-  <div class="panel-body text-center distance" {% if edit %}id="{{ day.format('YYYY-MM-DD') }}" day="{{ day.format('dddd MMMM D, YYYY') }}"{% endif %}>
-    {{ miles }}
-  </div>
-  <div class="panel-footer text-center">
-    {{ day.format('M/D/YY') }}
-  </div>
-</div>
-</div>
-{% endmacro #}
-
 {% macro miles_panel(header, miles, footer, id=None, day=None) %}
 <div class="miles-panel col-xs-3 col-sm-1">
 <div class="panel panel-default">
@@ -75,31 +59,13 @@ input#submit {
     {{ miles_panel('Total', 36, 'Week') }}
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="enter_miles" tabindex="-1" role="dialog" aria-labelledby="enter_miles_label" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="enter_miles_label"></h4>
-      </div>
-      <div class="modal-body">
-          <form class="form-inline" role="form">
-              {{ run_entry_form.hidden_tag() }}
-              <div class="form-group col-xs-9 col-md-9">
-                  {{ run_entry_form.miles.label(class='sr-only') }}
-                  <div class="input-group input-group-lg">
-                      {{ run_entry_form.miles(class='form-control text-right', type='text') }}
-                      <span class="input-group-addon">miles</span>
-                  </div>
-              </div>
-              {{ run_entry_form.submit(class="btn btn-lg btn-primary col-xs-3 col-md-3") }}
-          </form>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- Modal Dialog(s) -->
+{{ run_entry_dialog|safe }}
 {% endblock %}
+
+
+
+{% from "macros/js.html" import form_async_data %}
 
 {% block js_btm %}
 {{ super() }}
@@ -110,8 +76,9 @@ $('.panel-body').click(function() {
     $('input#date_str').attr('value', $(this).attr('id'));
     $('input#miles').attr('value', parseInt($(this).text()));
     if($(this).context.id) {
-        $('#enter_miles').modal('show');
+        $('#run_entry_dialog').modal('show');
     }
 });
+{{ form_async_data() }}
 </script>
 {% endblock %}

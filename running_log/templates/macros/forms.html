@@ -4,21 +4,24 @@
 {% endfor %}
 {% endmacro %}
 
-{% macro render_input_field_with_popover_errors(field, cls="") %}
+{% macro render_form_group_with_popover_errors(field, cls="", direction='right') %}
 <div class="form-group {% if field.errors %}has-error has-feedback{% endif %} {{ cls }}">
     {{ field.label(class='control-label') }}
-    {% if field.errors %}
-    {{ field(class='form-control input-popover', **{
+    {{ render_input_field_with_popover_errors(field) }}
+</div>
+{% endmacro %}
+
+{% macro render_input_field_with_popover_errors(field, cls="", direction='right') %}
+{% if field.errors %}
+    {{ field(class='form-control input-popover ' ~ cls, **{
             'data-toggle': 'popover', 
             'data-trigger': 'hover',
-            'data-placement': 'right',
+            'data-placement': direction,
             'data-container': 'body',
             'data-content': list_of_errors(field.errors)|escape,
     })|safe }}
     <span class="glyphicon glyphicon-remove form-control-feedback"></span>
     {% else %}
-    {{ field(class_='form-control')|safe }}
-    {% endif %}
-</div>
+    {{ field(class_='form-control ' ~ cls)|safe }}
+{% endif %}
 {% endmacro %}
-
