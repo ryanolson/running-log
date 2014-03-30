@@ -12,11 +12,7 @@ $('.modal').on('submit','form[data-async]', function(event) {
         data: $form.serialize(),
  
         success: function(data, status) {
-            var $target_body = $($target.find('.modal-body'));
-            var $data_body = $($(data).find('.modal-body'));
-            // console.log($target_body.html());
-            // console.log($data_body.html());
-            $target_body.html($data_body.html());
+            {{ caller() }}
         }
     }); 
  

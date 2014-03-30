@@ -73,12 +73,22 @@ input#submit {
 $('.panel-body').click(function() {
     // console.log($(this));
     $('.modal-title').text($(this).attr('day'));
-    $('input#date_str').attr('value', $(this).attr('id'));
+    $('input#date').attr('value', $(this).attr('id'));
     $('input#miles').attr('value', parseInt($(this).text()));
     if($(this).context.id) {
         $('#run_entry_dialog').modal('show');
     }
 });
-{{ form_async_data() }}
+{% call form_async_data() %}
+    var $next = $(data).find('#next').attr('value');
+    if($next) {
+        window.location.replace($next);
+    } else {
+        console.log("no");
+    } 
+    var $target_body = $($target.find('.modal-body'));                                                                                                                                                     
+    var $data_body = $($(data).find('.modal-body'));
+    $target_body.html($data_body.html());
+{% endcall %}
 </script>
 {% endblock %}

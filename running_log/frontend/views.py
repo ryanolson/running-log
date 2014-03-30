@@ -50,6 +50,7 @@ def run():
 
     if form.validate_on_submit():
         print "woot! validated"
+        form.next.data = url_for('.miles')
     else:
         print "der, form does not validate"
 

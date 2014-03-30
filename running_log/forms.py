@@ -9,7 +9,7 @@
 """
 import arrow
 from flask.ext.wtf import Form
-from flask_security.forms import RegisterForm
+from flask_security.forms import RegisterForm, NextFormMixin
 from wtforms.fields import TextField, BooleanField, IntegerField, SubmitField
 from wtforms.fields import HiddenField, DateField
 from wtforms.validators import Required
@@ -21,8 +21,7 @@ class ExtendedRegisterForm(RegisterForm):
     graduation_year = IntegerField()
 
 
-class RunEntryForm(Form):
-    date_str = HiddenField('Date', [Required()])
+class RunEntryForm(Form, NextFormMixin):
     date = DateField()
     miles = IntegerField('Miles', [Required()])
     submit = SubmitField('Save')
