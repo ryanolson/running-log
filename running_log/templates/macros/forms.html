@@ -11,8 +11,8 @@
 </div>
 {% endmacro %}
 
-{% macro render_input_field_with_popover_errors(field, cls="", direction='right') %}
-{% if field.errors %}
+{% macro render_input_field_with_popover_errors(field, cls="", direction='right', ignore_errors=False) %}
+{% if field.errors and not ignore_errors%}
     {{ field(class='form-control input-popover ' ~ cls, **{
             'data-toggle': 'popover', 
             'data-trigger': 'hover',

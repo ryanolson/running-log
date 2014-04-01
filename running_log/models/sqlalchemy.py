@@ -86,3 +86,4 @@ class Run(db.Model):
     date = db.Column(db.Date)
     miles = db.Column(db.Integer)
 
+
