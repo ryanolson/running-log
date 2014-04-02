@@ -16,7 +16,7 @@ from flask.ext.security import current_user
 from werkzeug.local import LocalProxy
 
 from ..forms import RunEntryForm
-from ..utils import this_week, Runs
+from ..utils import this_week, Runs, create_or_update_run_from_form
 from ..models.sqlalchemy import User, Run
 
 # Extensions
@@ -54,6 +54,7 @@ def run():
 
     if form.validate_on_submit():
         form.next.data = url_for('.miles')
+        create_or_update_run_from_form(current_user, form)
     else:
         flash_errors(form)
 

@@ -10,6 +10,8 @@
 import arrow
 from models.sqlalchemy import Run
 
+from . import extensions
+
 def now():
     return arrow.now('US/Central')
 
@@ -94,4 +96,14 @@ class Runs(object):
         return 0
 
 
+def create_or_update_run_from_form(user, form):
+    date = arrow.get(form.date.data, 'YYYY-MM-DD').replace(tzinfo='US/Central')
+    run = user.runs.filter(Run.date == date.date()).first()
+    if not run:
+        run = Run()
+        run.user_id = user.id
+        run.date = date.date()
+    run.miles = form.miles.data
+    extensions.db.session.add(run)
+    extensions.db.session.commit()
 
