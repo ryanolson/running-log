@@ -1,0 +1,38 @@
+{% set page_title = 'Tim Miles Running Log' %}
+{% extends 'clapp/base.html' %}
+
+{% block css %}
+{{ super() }}
+<link href="{{ url_for('static', filename='css/cover.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body_content %}
+    <div class="site-wrapper">
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h2 class="masthead-brand">Tim Miles Running Log <small>dotcom</small></h2>
+              <ul class="nav masthead-nav">
+                <li><a href="{{ url_for('security.login') }}">Login</a></li>
+                <li><a href="{{ url_for('security.register') }}">Register</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <h1 class="cover-heading">Run > Record > Done</h1>
+            <p class="lead"></p>
+            <a href="{{ url_for('security.login') }}" class="btn btn-lg btn-default">Ready Go</a>
+            </p>
+          </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>© 2014 Johnnie CC</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

@@ -35,7 +35,8 @@ class BaseConfig(object):
     SOCIAL_CONNECT_ALLOW_VIEW = '/profile'
     SOCIAL_FACEBOOK = config_social.CONNECTIONS['facebook']
     SOCIAL_GITHUB = config_social.CONNECTIONS['github']
-    SOCIAL_APP_URL =  'http://test.ryanolson.me'
+    SOCIAL_STRAVA = config_social.CONNECTIONS['strava']
+    SOCIAL_APP_URL =  'https://miles.ryanolson.me'
 
     # Sentry
     # SENTRY_DSN = 

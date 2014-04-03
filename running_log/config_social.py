@@ -12,16 +12,21 @@
 
 CONNECTIONS = {
     'facebook': {
-        'consumer_key': '235050360020182',
-        'consumer_secret': '9f4b2c6acbf485bfd9942dd7c8b8320b',
+        'consumer_key': '272895716208605',
+        'consumer_secret': 'd287eaf678e545777e91696921cf0e96',
         'request_token_params': {
-            'scope': 'email,publish_stream',
+            'scope': 'email, user_education_history',
         },
     },
     'github': { 
         'consumer_key': 'c74fbb9ca61717d0e431',
         'consumer_secret': '03ecb6034c4c8b741c66112ffb0c535af5a66591',
         'module': 'running_log.github',
+    },
+    'strava': { 
+        'consumer_key': '1207',
+        'consumer_secret': '78f4310db291ba03a9f8900a1332c86314434533',
+        'module': 'running_log.strava',
     },
 }
 

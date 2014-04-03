@@ -1,5 +1,5 @@
 {# should extend the users default base, not clapp base #}
-{% extends "clapp/base.html" %}
+{% extends "layouts/base.html" %}
 {% from "macros/forms.html" import render_form_group_with_popover_errors as render_field %}
 
 {% macro social_login(provider_id, display_name) %}
@@ -23,23 +23,26 @@ body {
    margin-top: 10px;
 }
 .login-content {
-    max-width: 330px;
-    padding: 5px;
+    max-width: 380px;
+    padding: 15px;
 }
 </style>
 {% endblock %}
 
 {% block body %}
+<div class="alert alert-warning col-md-6 col-md-offset-3">
+    Before you login, you need to <a href="{{ url_for('security.register') }}">register</a>.
+</div>
 <div class="top-buffer hidden-xs"></div>
 <div class="row">
     <div class="login-content center-block">
 
 <!-- Login Content -->
-<h3 class="text-center">Login to Tim Miles Running Log</h3>
-<hr>
+<!-- <h3 class="text-center">Login to Tim Miles Running Log</h3> -->
+<!-- <hr> -->
 <ul class="nav nav-tabs" id="login-tabs">
   <li class="active"><a href="#login-password" data-toggle="tab">User/Password</a></li>
-  <li><a href="#login-social" data-toggle="tab">Password-less (Cool!)</a></li>
+  <li><a href="#login-social" data-toggle="tab">Passwords Suck</a></li>
 </ul>
 <div class="tab-content">
     <div class="tab-pane fade in active" id="login-password">
