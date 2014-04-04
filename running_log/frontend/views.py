@@ -16,7 +16,8 @@ from flask.ext.security import current_user
 from werkzeug.local import LocalProxy
 
 from ..forms import RunEntryForm
-from ..utils import this_week, Runs, create_or_update_run_from_form
+from ..utils import Runs, this_week, last_week, create_or_update_run_from_form
+from .. import utils
 from ..models.sqlalchemy import User, Run
 
 # Extensions
@@ -35,13 +36,21 @@ def index():
 @login_required
 def miles():
     now = arrow.now('US/Central').floor('day')
+    current_week = utils.this_week()
     runs = Runs(current_user)
+    runs_last_week = None
+    if now.weekday() <= 1: # only show last week on Sunday and Monday
+        runs_last_week = Runs(current_user, dates=last_week())
     run_entry_form = RunEntryForm()
     run_entry_dialog = render_template('frontend/run_entry_dialog.html', 
             run_entry_form=run_entry_form)
+    group_runs = None
+    if current_user.johnnie_cc:
+        group_users = utils.runs_for_overlapping_johnnies(current_user)
+        group_runs = [Runs(user, dates=current_week) for user in group_users]
     return render_template('frontend/miles.html', this_week=this_week(),
-            run_entry_dialog=run_entry_dialog, now=now, runs=runs)
-
+            run_entry_dialog=run_entry_dialog, now=now, runs=runs,
+            runs_last_week=runs_last_week, group_runs=group_runs)
 
 @frontend.route('/run', methods=['POST'])
 @login_required

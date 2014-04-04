@@ -34,7 +34,8 @@ def get_api(connection, **kwargs):
 def get_provider_user_id(response, **kwargs):
     if response:
         client = Client(access_token=response['access_token'])
-        return str(client.get_athlete()['athlete']['id'])
+        user = client.get_athlete()
+        return str(user.id)
     return None
 
 

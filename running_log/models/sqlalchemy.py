@@ -17,6 +17,11 @@ roles_users = db.Table('roles_users',
     db.Column('role_id', db.Integer(), db.ForeignKey('roles.id')))
 
 
+groups_users = db.Table('groups_users',
+    db.Column('user_id', db.Integer(), db.ForeignKey('users.id')),
+    db.Column('group_id', db.Integer(), db.ForeignKey('groups.id')))
+
+
 class Role(db.Model, RoleMixin):
 
     __tablename__ = "roles"
@@ -58,6 +63,8 @@ class User(db.Model, UserMixin):
     # Tim Miles Running Log
     runs = db.relationship('Run', lazy='dynamic',
             backref=db.backref('user', lazy='joined'), cascade='all')
+    groups = db.relationship('Group', secondary=groups_users,
+            backref=db.backref('users', lazy='joined'))
 
 
 class Connection(db.Model):
@@ -85,5 +92,17 @@ class Run(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     date = db.Column(db.Date)
     miles = db.Column(db.Integer)
+
+
+class Group(db.Model):
+
+    __tablename__ = "groups"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    description = db.Column(db.String(255))
+    listed = db.Column(db.Boolean, default=True)
+    public = db.Column(db.Boolean, default=False)
+    request_access = db.Column(db.Boolean, default=True)
 
 

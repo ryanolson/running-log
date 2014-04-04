@@ -33,7 +33,7 @@ hr {
 {% block body %}
 <div class="spacer hidden-xs"></div>
 <div class="row">
-    <div class="col-md-4 col-md-offset-4">
+    <div class="col-sm-6 col-sm-offset-3">
         <form class="form well" role="form" method="POST" action="{{ url_for('security.register') }}">
         {{ register_user_form.hidden_tag() }}
         {{ render_field(register_user_form.first_name) }}

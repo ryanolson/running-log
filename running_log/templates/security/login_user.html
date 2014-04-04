@@ -26,12 +26,14 @@ body {
     max-width: 380px;
     padding: 15px;
 }
+.well > hr {
+    border-top: 1px solid #676767;
 </style>
 {% endblock %}
 
 {% block body %}
 <div class="alert alert-warning col-md-6 col-md-offset-3">
-    Before you login, you need to <a href="{{ url_for('security.register') }}">register</a>.
+    Before you login for the first time, you need to <a href="{{ url_for('security.register') }}">register</a>.
 </div>
 <div class="top-buffer hidden-xs"></div>
 <div class="row">
@@ -58,7 +60,10 @@ body {
     </div>
     <div class="tab-pane fade" id="login-social">
         <div class="well">
+            <p>To login without a password, you must first make the connections from your profile.</p>
+            <hr>
             {{ social_login('facebook', 'Facebook') }}
+            {{ social_login('strava', 'Strava') }}
             {{ social_login('github', 'Github') }}
         </div>
     </div>

@@ -8,9 +8,10 @@
     :license: GPLv3, see LICENSE for more details.
 """
 import arrow
-from models.sqlalchemy import Run
+from sqlalchemy import or_, and_
 
 from . import extensions
+from models.sqlalchemy import User, Run
 
 def now():
     return arrow.now('US/Central')
@@ -107,3 +108,17 @@ def create_or_update_run_from_form(user, form):
     extensions.db.session.add(run)
     extensions.db.session.commit()
 
+
+def runs_for_overlapping_johnnies(user):
+    dates = this_week()
+    start = dates[0]
+    end = now()
+    q = User.query.join(User.runs).\
+            filter(and_(Run.date.between(start.date(), end.date()),
+                and_(User.johnnie_cc == True,
+                    and_(User.graduation_year >= user.graduation_year - 3,
+                        User.graduation_year <= user.graduation_year + 3)
+                    )
+                )
+            ).order_by(User.last_name, User.first_name)
+    return q.all()
