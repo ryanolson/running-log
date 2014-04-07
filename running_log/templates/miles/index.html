@@ -48,6 +48,8 @@
     padding-right: 2px;
     padding-top: 5px;
     padding-bottom: 5px;
+}
+div[editable] {
     cursor: pointer;
 }
 .panel-heading {
@@ -92,7 +94,7 @@ input#submit {
 {% endif %}
 
 <!-- Groups -->
-{% if group_runs %}
+{% if group_runs or group_runs_lw %}
 <div class="row">
     <div class="col-sm-10 col-sm-offset-1 col-xs-12">
 
@@ -103,7 +105,7 @@ input#submit {
   <table class="table table-hover">
     <thead><tr>
         <th class="col-sm-2">Name</th>
-        {% for day in this_week %}
+        {% for day in group_runs.dates %}
             <th class="td-center col-sm-1">{{ day.format('ddd') }}</th>
         {% endfor %}
         <th class="td-center col-sm-2">Total</th> 
@@ -126,6 +128,30 @@ input#submit {
 </div>
 {% endif %}
 
+{% macro group_run_table(gruns) %}
+<div class="table-responsive">
+  <table class="table table-hover">
+    <thead><tr>
+        <th class="col-sm-2">Name</th>
+        {% for day in gruns.dates %}
+            <th class="td-center col-sm-1">{{ day.format('ddd') }}</th>
+        {% endfor %}
+        <th class="td-center col-sm-2">Total</th> 
+    </tr></thead>
+    <tbody>
+    {% for user_runs in gruns %}
+    <tr {% if user_runs.user == current_user %}class="info"{% endif %}>
+        <td class="col-sm-2">{{ user_runs.user.last_name }}, {{ user_runs.user.first_name }}</td>
+        {% for day in this_week %}
+            {{ miles_for_day_td(user_runs, day, today=now) }}
+        {% endfor %}
+        <td class="td-center col-sm-2">{{ user_runs.total_miles }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endmacro %}
 
 <!-- Modal Dialog(s) -->
 {{ run_entry_dialog|safe }}

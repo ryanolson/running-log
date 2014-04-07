@@ -15,9 +15,11 @@ from flask.ext.social import SQLAlchemyConnectionDatastore
 from . import config
 from .extensions import db, security, social
 from .frontend.views import frontend
+from .miles.views import miles
 
 BLUEPRINTS = (
     frontend,
+    miles,
 )
 
 DOCUMENTS = (

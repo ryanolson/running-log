@@ -1,0 +1,20 @@
+{% import "bootstrap/macros.html" as bootstrap %}
+{% from "macros/forms.html" import render_input_field_with_popover_errors as render_input_field %}
+
+{% call bootstrap.modal_dialog("run_entry_dialog") %}
+{{ bootstrap.modal_dialog_header("") }}
+{% call bootstrap.modal_dialog_body() %}
+{{ bootstrap.flash_messages() }}
+<form role="form" class="form-inline" data-async data-target="#run_entry_dialog" action="{{ url_for('miles.run') }}" method="POST">
+    {{ run_entry_form.hidden_tag() }}
+    <div class="form-group col-xs-9 col-md-9">
+        {{ run_entry_form.miles.label(class='sr-only') }}
+        <div class="input-group input-group-lg">
+            {{ render_input_field(run_entry_form.miles, cls='text-right', direction='bottom', ignore_errors=True) }}
+            <span class="input-group-addon">miles</span>
+        </div>
+    </div>
+    {{ run_entry_form.submit(class="btn btn-lg btn-primary col-xs-3 col-md-3") }}
+</form>
+{% endcall %}
+{% endcall %}

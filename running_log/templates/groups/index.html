@@ -1,0 +1,34 @@
+{% set page_title = 'Groups' %}
+{% extends 'layouts/base.html' %}
+
+{% block body %}
+{% endblock %}
+
+
+{% from "macros/js.html" import form_async_data %}
+
+{% block js_btm %}
+{{ super() }}
+<script>
+$('.panel-body').click(function() {
+    $('.modal-title').text($(this).attr('day'));
+    $('input#date').attr('value', $(this).attr('id'));
+    $('input#miles').attr('value', parseInt($(this).text()));
+    if($(this).is("[editable]")) {
+        $('#run_entry_dialog').modal('show');
+    }
+});
+$('#run_entry_dialog').on('hidden.bs.modal', function (e) {
+    $('.alert').alert('close');
+})
+{% call form_async_data() %}
+    var $next = $(data).find('#next').attr('value');
+    if($next) {
+        window.location.replace($next);
+    }
+    var $target_body = $($target.find('.modal-body'));                                                                                                                                                     
+    var $data_body = $($(data).find('.modal-body'));
+    $target_body.html($data_body.html());
+{% endcall %}
+</script>
+{% endblock %}
