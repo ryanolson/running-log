@@ -22,8 +22,13 @@ setup(
     install_requires=[
         'clapp',
         'arrow',
+        'facebook-sdk',
+        'stravalib',
+        'github3.py',
+        'psycopg2',
         'Flask-Security',
         'Flask-Social',
+        'Flask-SQLAlchemy',
     ],
     scripts=[
         'scripts/running_logctl',
