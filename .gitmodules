@@ -1,0 +1,6 @@
+[submodule "dependencies/clapp"]
+	path = dependencies/clapp
+	url = git@github.com:ryanolson/clapp.git
+[submodule "dependencies/flask-social"]
+	path = dependencies/flask-social
+	url = git@github.com:ryanolson/flask-social.git

@@ -21,8 +21,9 @@ setup(
     ],
     install_requires=[
         'clapp',
+        'arrow',
         'Flask-Security',
-        'flask-mongoengine',
+        'Flask-Social',
     ],
     scripts=[
         'scripts/running_logctl',
