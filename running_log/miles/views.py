@@ -43,6 +43,7 @@ def index():
 #       group_runs = models.GroupRuns(current_user.primary_group)
 
     # SJU CC
+    johnnie_cc_runs = None
     if current_user.johnnie_cc:
         johnnie_cc_runs = models.JohnnieCCRuns(current_user, 
                 start_date=start, end_date=end)

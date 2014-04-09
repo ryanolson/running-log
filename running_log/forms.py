@@ -8,11 +8,12 @@
     :license: GPLv3, see LICENSE for more details.
 """
 import arrow
+from clapp.forms import flash_errors
 from flask.ext.wtf import Form
 from flask_security.forms import RegisterForm, NextFormMixin
 from wtforms.fields import TextField, BooleanField, IntegerField, SubmitField
 from wtforms.fields import HiddenField, DateField
-from wtforms.validators import Required, NumberRange
+from wtforms.validators import Required, NumberRange, Optional
 
 from .utils import is_date_editable, editable_range
 
@@ -20,9 +21,14 @@ from .utils import is_date_editable, editable_range
 class ExtendedRegisterForm(RegisterForm):
     first_name = TextField('First Name', [Required()])
     last_name = TextField('Last Name', [Required()])
-    johnnie_cc = BooleanField()
-    graduation_year = IntegerField()
+    johnnie_cc = BooleanField('Johnnie CC', [Optional()])
+    graduation_year = IntegerField('Graduation Year', [Optional()])
 
+    def validate(self):
+        rv = super(ExtendedRegisterForm, self).validate()
+        if not rv:
+            flash_errors(self)
+        return rv
 
 class RunEntryForm(Form, NextFormMixin):
     date = HiddenField()
