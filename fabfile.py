@@ -1,41 +1,46 @@
+import os
+
 from fabric.api import *
-from fabric.context_managers import prefix, cd
+from fabric.context_managers import prefix, cd, lcd
 
+from fabric.operations import local,  run
+from fabric.api import task
+from fabric.state import env
 
-env.hosts = ['ryanolson.me']
-
-root_dir = os.path.join('Web', 'RunningLog')
-virtualenv = 'running-log'
+root_directory = os.path.join('~', 'Web', 'ProductionWebApps', 'RunningLog')
+root_virtualenv = 'running-log'
 
 dependencies = [
     'clapp',
 ]
 
-def load_virtualenv(branch):
-    return "workon {0}.{1}".format(virtualenv, branch)
+@task
+def localhost():
+    env.cd = lcd
+    env.run = local
+    env.hosts = ['localhost']
 
-def deploy(branch='develop', deploy_dir=None):
-    deploy_dir = os.path.join(root_dir, branch)
-    local("git push origin {0}".format(branch))
-    with cd(deploy_dir):
-        run("git pull origin {0}".format(branch))
-        run("git submodule update --init");
-        with prefix(load_virtualenv(branch)):
-            for dependence in dependencies:
-                with cd("dependencies/{0}".format(dependence)):
-                    run("python setup.py develop")
-            run("python setup.py develop")
-    with prefix(load_virtualenv(branch)):
-        run("pkill gunicorn; gunicorn --daemon --bind 127.0.0.1:12345 --workers 4 benchmarkr.application:create_app\(\)")
-    with prefix("workon {0}".format(virtualenv)), cd("{0}/logs/celery".format(srcdir)):
-        run("celeryd-multi restart benchmarkr1 --app=benchmarkr.worker --autoreload --concurrency=2 --loglevel=info")
+@task
+def remote():
+    env.cd = cd
+    env.run = run
+    env.hosts = ['ryanolson.me']
 
-def initialize(branch='develop'):
-    pass
+@task
+def restart():
+    logs = os.path.join(root_directory, 'logs')
+    with prefix('. /usr/local/bin/virtualenvwrapper.sh; workon running-log'), env.cd(logs):
+        env.run("ps aux | grep running_log")
+        env.run("../scripts/kill_gunicorn")
+        env.run("gunicorn --daemon --name=running_log --pid=gunicorn.running-log.pid --bind 127.0.0.1:12346 --workers 4 running_log.application:create_app\(\)")
+        env.run("ps aux | grep running_log")
+        env.run("cat gunicorn.running-log.pid")
 
-def clean(branch='develop')
-    pass
+@task
+def update():
+    app_directory = os.path.join(root_directory, 'running-log')
+    with env.cd(app_directory):
+        env.run("git pull origin develop")
+        env.run("git submodule update --init")
 
-def restart_celery():
-    with prefix("workon Benchmarkr"), cd("/usr/local/var/www/benchmarkr/logs"):
-        run("celeryd-multi restart benchmarkr1 --app=benchmarkr.worker --autoreload --concurrency=2 --loglevel=info")
+
