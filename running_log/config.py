@@ -8,7 +8,7 @@
     :license: GPLv3, see LICENSE for more details.
 """
 
-from . import config_social
+from . import config_secret
 
 class BaseConfig(object):
 
@@ -16,7 +16,7 @@ class BaseConfig(object):
     TESTING = False
 
     # http://flask.pocoo.org/docs/quickstart/#sessions
-    SECRET_KEY = 'super-secret-key-errrr'
+    SECRET_KEY = config_secret.SECRET_KEY
 
     # Flask-Bootstrap3
     USE_CDN = False
@@ -33,9 +33,9 @@ class BaseConfig(object):
     SECURITY_PASSWORD_SALT = 'it was in the spring of that year that i calibrated by stride'
 
     SOCIAL_CONNECT_ALLOW_VIEW = '/profile'
-    SOCIAL_FACEBOOK = config_social.CONNECTIONS['facebook']
-    SOCIAL_GITHUB = config_social.CONNECTIONS['github']
-    SOCIAL_STRAVA = config_social.CONNECTIONS['strava']
+    SOCIAL_FACEBOOK = config_secret.CONNECTIONS['facebook']
+    SOCIAL_GITHUB = config_secret.CONNECTIONS['github']
+    SOCIAL_STRAVA = config_secret.CONNECTIONS['strava']
     SOCIAL_APP_URL =  'https://tim-miles-running-log.com'
 
     # Sentry
