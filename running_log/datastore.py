@@ -50,6 +50,7 @@ class RunningLogDatastore(object):
     def johnnie_cc_runs(self, user, start_date=None, end_date=None):
         raise NotImplementedError
 
+
 class SQLAlchemyRunningLogDatastore(SQLAlchemyDatastore, RunningLogDatastore):
 
     def __init__(self, db, user, run, group):
@@ -67,16 +68,18 @@ class SQLAlchemyRunningLogDatastore(SQLAlchemyDatastore, RunningLogDatastore):
             return query.filter(field <= end_date)
         return query
 
-    def user_runs(self, user, start_date, end_date):
-        start = utils.get_rldate(start_date)
-        end = utils.get_rldate(end_date)
+    def user_runs(self, user, start_date=None, end_date=None):
         query = self.append_date_filter(user.runs, self.run_model.date,
                 start_date=start_date, end_date=end_date)
         return query.all()
 
-    def johnnie_cc_runs(self, user, start_date=None, end_date=None):
+    def johnnie_cc_runs(self, user, start_date=None, end_date=None, all_years=None):
         query = self.run_model.query.join(self.user_model).\
                 filter(self.user_model.johnnie_cc == True)
+        if not all_years:
+            query = query.\
+                    filter(self.user_model.graduation_year >= user.graduation_year - 3).\
+                    filter(self.user_model.graduation_year <= user.graduation_year + 3)
         query = self.append_date_filter(query, self.run_model.date,
                 start_date=start_date, end_date=end_date)
         return query.all()
