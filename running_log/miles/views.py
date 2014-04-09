@@ -29,7 +29,7 @@ miles = Blueprint('miles', __name__, url_prefix='/miles')
 @login_required
 def index():
     # Runs
-    now = rltime.now()
+    now = rltime.now().floor('day')
     start, end = now.span('week')
     this_week, last_week = now.this_week, None
     if now.weekday() <= 2:  # Sunday=0, Monday=1, Tuesday=2
