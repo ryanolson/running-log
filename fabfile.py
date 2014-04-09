@@ -29,7 +29,7 @@ def remote():
 @task
 def restart():
     logs = os.path.join(root_directory, 'logs')
-    with prefix('. /usr/local/bin/virtualenvwrapper.sh; workon running-log'), env.cd(logs):
+    with prefix('workon running-log'), env.cd(logs):
         env.run("ps aux | grep running_log")
         env.run("../scripts/kill_gunicorn")
         env.run("gunicorn --daemon --name=running_log --pid=gunicorn.running-log.pid --bind 127.0.0.1:12346 --workers 4 running_log.application:create_app\(\)")
