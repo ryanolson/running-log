@@ -43,3 +43,10 @@ def profile():
         profile_url=profile_url
     )
 
+@frontend.route('/privacy')
+def privacy():
+    return render_template('frontend/privacy.html')
+
+@frontend.route('/terms-of-use')
+def terms_of_use():
+    return render_template('frontend/terms-of-use.html')
