@@ -8,10 +8,30 @@
     :license: GPLv3, see LICENSE for more details.
 """
 import arrow
+import datetime
 from sqlalchemy import or_, and_
 
 from . import extensions
+from . import rltime
 from models.sqlalchemy import User, Run
+
+
+def get_rldate(date):
+    """Converts multiple forms of a date to a rltime object."""
+    if date is None:
+        return None
+    if isinstance(date, rltime.RLTime):
+        pass
+    elif isinstance(date, basestring):
+        date = rltime.fromstr(date)
+    elif isinstance(date, datetime.date):
+        date = rltime.fromdate(date)
+    elif isinstance(date, arrow.Arrow):
+        date = rltime.fromdate(data.date())
+    else:
+        raise TypeError('unrecognized date = {0}'.format(str(date))) 
+    return date
+
 
 def now():
     return arrow.now('US/Central')

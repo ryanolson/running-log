@@ -26,6 +26,7 @@ setup(
         'stravalib',
         'github3.py',
         'psycopg2',
+        'py-bcrypt',
         'Flask-Security',
         'Flask-Social',
         'Flask-SQLAlchemy',

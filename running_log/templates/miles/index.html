@@ -3,17 +3,17 @@
 
 {% macro miles_panel(header, miles, footer, id=None, day=None, category=None, editable=True) %}
 <div class="miles-panel col-xs-3 col-sm-1">
-    <div class="panel {% if category %}panel-{{category}}{% else %}panel-default{% endif %}">
-  <div class="panel-heading">
-    <h3 class="panel-title text-center">{{ header }}</h3>
-  </div>
-  <div class="panel-body text-center distance" {% if id and day %}id="{{ id }}" day="{{ day }}"{% endif %} {% if editable %}editable{% endif %}>
-    {{ miles }}
-  </div>
-  <div class="panel-footer text-center">
-    {{ footer }}
-  </div>
-</div>
+    <div class="panel {% if category %}panel-{{category}}{% else %}panel-default{% endif %}" {% if editable %}editable{% endif %}>
+        <div class="panel-heading">
+            <h3 class="panel-title text-center">{{ header }}</h3>
+        </div>
+        <div class="panel-body text-center distance" {% if id and day %}id="{{ id }}" day="{{ day }}"{% endif %} {% if editable %}editable{% endif %}>
+            {{ miles }}
+        </div>
+        <div class="panel-footer text-center">
+            {{ footer }}
+        </div>
+    </div>
 </div>
 {% endmacro %}
 
@@ -81,20 +81,20 @@ input#submit {
             {{ miles_day_panel(day, '--', editable=False) }}
         {% endif %}
     {% endfor %}
-    {{ miles_panel('Total', runs.total_miles, 'Week', editable=False) }}
+    {{ miles_panel('Total', runs.miles_over_range(this_week), 'Week', editable=False, category='success') }}
 </div>
-{% if runs_last_week %}
+{% if last_week %}
 <div class="row">
     <div class="hidden-xs col-sm-2 col-md-2"></div>
-    {% for day in runs_last_week.dates %}
-        {{ miles_day_panel(day, runs_last_week.miles_for_date(day), category='info') }}
+    {% for day in last_week %}
+        {{ miles_day_panel(day, runs.miles_for_date(day), category='info') }}
     {% endfor %}
-    {{ miles_panel('Total', runs_last_week.total_miles, 'Week', editable=False) }}
+    {{ miles_panel('Total', runs.miles_over_range(last_week), 'Week', editable=False, category='success') }}
 </div>
 {% endif %}
 
 <!-- Groups -->
-{% if group_runs or group_runs_lw %}
+{% if johnnie_cc_runs %}
 <div class="row">
     <div class="col-sm-10 col-sm-offset-1 col-xs-12">
 
@@ -111,13 +111,13 @@ input#submit {
         <th class="td-center col-sm-2">Total</th> 
     </tr></thead>
     <tbody>
-    {% for user_runs in group_runs %}
+    {% for key, user_runs in johnnie_cc_runs._runs_by_user|dictsort %}
     <tr {% if user_runs.user == current_user %}class="info"{% endif %}>
-        <td class="col-sm-2">{{ user_runs.user.last_name }}, {{ user_runs.user.first_name }}</td>
+        <td class="col-sm-2">{{ key }}</td>
         {% for day in this_week %}
             {{ miles_for_day_td(user_runs, day, today=now) }}
         {% endfor %}
-        <td class="td-center col-sm-2">{{ user_runs.total_miles }}</td>
+        <td class="td-center col-sm-2">{{ user_runs.miles_over_range(this_week) }}</td>
     </tr>
     {% endfor %}
     </tbody>
@@ -128,7 +128,7 @@ input#submit {
 </div>
 {% endif %}
 
-{% macro group_run_table(gruns) %}
+{% macro group_run_table(runs, range ) %}
 <div class="table-responsive">
   <table class="table table-hover">
     <thead><tr>
@@ -164,12 +164,14 @@ input#submit {
 {% block js_btm %}
 {{ super() }}
 <script>
-$('.panel-body').click(function() {
+$('.panel').click(function() {
     if($(this).is("[editable]")) {
-        $('.modal-title').text($(this).attr('day'));
-        $('input#date').attr('value', $(this).attr('id'));
-        $('input#miles').attr('value', parseInt($(this).text()));
-        $('#run_entry_dialog').modal('show');
+        $body = $(this).find('.panel-body');
+        $dialog = $('#run_entry_dialog');
+        $dialog.find('.modal-title').text($body.attr('day'));
+        $dialog.find('input#date').attr('value', $body.attr('id'));
+        $dialog.find('input#miles').attr('value', parseInt($body.text()));
+        $dialog.modal('show');
     }
 });
 $('#run_entry_dialog').on('show.bs.modal', function (e) {

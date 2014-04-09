@@ -12,40 +12,22 @@ from __future__ import absolute_import
 import arrow
 
 
-class RLArrow(arrow.Arrow):
+class RLTime(arrow.Arrow):
     """Custom Arrow class."""
 
     def weekday(self):
         """Running Log starts on Sunday; adjust weekday to match."""
-        return (super(RLArrow, self).weekday() + 1) % 7
+        return (super(RLTime, self).weekday() + 1) % 7
 
-    @property
-    def sod(self):
-        """Start of day"""
-        return self.floor('day')
-
-    @property
-    def eod(self):
-        """End of day"""
-        return self.ceil('day')
-
-    @property
-    def sow(self):
-        """Start of week"""
-        sunday = self
-        if self.weekday():
-            sunday = self.replace(days=-today.isoweekday())
-        return sunday.floor('day') 
-
-    @property
-    def eow(self):
-        """Start of week"""
-        return self.eod.replace(days=+6).ceil('day')
+    def isoweekday(self):
+        """Running Log starts on Sunday; adjust weekday to match."""
+        return self.weekday() + 1
 
     @property
     def this_week(self):
         """List of days in the week"""
-        return self.range('day', self.sow, self.eow)
+        start, end = self.span('week')
+        return self.range('day', start, end)
 
     @property
     def last_week(self):
@@ -53,12 +35,16 @@ class RLArrow(arrow.Arrow):
         return self.replace(weeks=-1).this_week
 
     @property
-    def datestr(self):
+    def ymd(self):
         return self.format('YYYY-MM-DD')
+
+    @property
+    def md(self):
+        return self.format('M/D')
 
 
 # Internal Factory
-_factory = arrow.ArrowFactory(RLArrow)
+_factory = arrow.ArrowFactory(RLTime)
 
 
 # API
@@ -90,7 +76,7 @@ def now(tz='US/Central'):
     return _factory.now(tz)
 
 def fromdate(date):
-    return RLArrow.fromdate(date).replace(tzinfo='US/Central')
+    return RLTime.fromdate(date).replace(tzinfo='US/Central')
 
 
 def fromstr(date, format='YYYY-MM-DD'):

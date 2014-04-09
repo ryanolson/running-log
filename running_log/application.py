@@ -25,6 +25,12 @@ BLUEPRINTS = (
 DOCUMENTS = (
 )
 
+class _RunningLogState(object):
+
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key.lower(), value)
+    
 
 class RunningLog(Clapp):
     
@@ -45,7 +51,15 @@ class RunningLog(Clapp):
         from models.sqlalchemy import Connection
         self.connections_datastore = SQLAlchemyConnectionDatastore(db, Connection)
         social.init_app(self.app, self.connections_datastore)
-        
+ 
+        # Running Log
+        from .datastore import SQLAlchemyRunningLogDatastore
+        from .models.sqlalchemy import Run, Group
+        datastore = SQLAlchemyRunningLogDatastore(db, User, Run, Group)
+        self.app.extensions['running_log'] = _RunningLogState(**{
+            "datastore": datastore,
+        })
+     
         # Flask-MongoEngine
         # db.init_app(self.app)
 
