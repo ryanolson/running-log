@@ -60,6 +60,8 @@ class Production(BaseConfig):
     MONGODB_HOST = 'localhost'
     MONGODB_PORT = 27017
 
+    LOG_FOLDER = '.'
+
 class Debug(Production):
     DEBUG = True
     USE_CDN = False
