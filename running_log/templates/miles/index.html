@@ -76,12 +76,12 @@ input#submit {
         {% if day == now %}
             {{ miles_day_panel(day, runs.miles_for_date(day), category='primary') }}
         {% elif day < now %}
-            {{ miles_day_panel(day, runs.miles_for_date(day), category='info') }}
+            {{ miles_day_panel(day, runs.miles_for_date(day), category='default') }}
         {% else %}
             {{ miles_day_panel(day, '--', editable=False) }}
         {% endif %}
     {% endfor %}
-    {{ miles_panel('Total', runs.miles_over_range(this_week), 'Week', editable=False, category='success') }}
+    {{ miles_panel('Total', runs.miles_over_range(this_week), 'Week', editable=False) }}
 </div>
 {% if last_week %}
 <div class="row">
@@ -89,7 +89,7 @@ input#submit {
     {% for day in last_week %}
         {{ miles_day_panel(day, runs.miles_for_date(day), category='info') }}
     {% endfor %}
-    {{ miles_panel('Total', runs.miles_over_range(last_week), 'Week', editable=False, category='success') }}
+    {{ miles_panel('Total', runs.miles_over_range(last_week), 'Week', editable=False) }}
 </div>
 {% endif %}
 
@@ -112,7 +112,7 @@ input#submit {
     </tr></thead>
     <tbody>
     {% for key, user_runs in johnnie_cc_runs._runs_by_user|dictsort %}
-    <tr {% if user_runs.user == current_user %}class="info"{% endif %}>
+    <tr {% if user_runs.user == current_user %}class="active"{% endif %}>
         <td class="col-sm-2">{{ key }}</td>
         {% for day in this_week %}
             {{ miles_for_day_td(user_runs, day, today=now) }}
