@@ -50,6 +50,12 @@ class RunningLogDatastore(object):
     def johnnie_cc_runs(self, user, start_date=None, end_date=None):
         raise NotImplementedError
 
+    def find_run(self, user, date):
+        raise NotImplementedError
+
+    def create_or_update_run(self, **kwargs):
+        raise NotImplementedError
+
 
 class SQLAlchemyRunningLogDatastore(SQLAlchemyDatastore, RunningLogDatastore):
 
@@ -83,3 +89,20 @@ class SQLAlchemyRunningLogDatastore(SQLAlchemyDatastore, RunningLogDatastore):
         query = self.append_date_filter(query, self.run_model.date,
                 start_date=start_date, end_date=end_date)
         return query.all()
+
+    def find_run(self, user, date):
+        date = utils.get_rldate(date)
+        run = user.runs.filter(self.run_model.date == date.date()).first()
+        return run
+
+    def create_or_update_run(self, user, **kwargs):
+        date = utils.get_rldate(kwargs['date'])
+        run = self.find_run(user, date)
+        if not run:
+            run = self.run_model()
+            run.user_id = user.id
+            run.date = date.date()
+        run.miles = kwargs['miles']
+        self.put(run)
+
+

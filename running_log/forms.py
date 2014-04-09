@@ -41,3 +41,5 @@ class RunEntryForm(Form, NextFormMixin):
         
         return True
 
+    def to_dict(self):
+        return dict(miles=self.miles.data, date=self.date.data)

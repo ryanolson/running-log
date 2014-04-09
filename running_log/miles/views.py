@@ -15,11 +15,12 @@ from flask.ext.security import current_user
 from werkzeug.local import LocalProxy
 
 from . import models
+from .. import forms
 from .. import rltime
 from .. import utils
-from ..forms import RunEntryForm
-from ..utils import create_or_update_run_from_form
 
+_running_log = LocalProxy(lambda: current_app.extensions['running_log'])
+_datastore = LocalProxy(lambda: _running_log.datastore)
 
 # Blueprint
 miles = Blueprint('miles', __name__, url_prefix='/miles')
@@ -47,7 +48,7 @@ def index():
                 start_date=start, end_date=end)
 
     # Run Entry Form
-    run_entry_form = RunEntryForm()
+    run_entry_form = forms.RunEntryForm()
     run_entry_dialog = render_template('miles/run_entry_dialog.html', 
             run_entry_form=run_entry_form)
 
@@ -60,7 +61,7 @@ def index():
 @miles.route('/run', methods=['POST'])
 @login_required
 def run():
-    form_class = RunEntryForm
+    form_class = forms.RunEntryForm
 
     if request.form:
         form = form_class(request.form)
@@ -69,7 +70,8 @@ def run():
 
     if form.validate_on_submit():
         form.next.data = url_for('.index')
-        create_or_update_run_from_form(current_user, form)
+        _datastore.create_or_update_run(current_user, **form.to_dict())
+        _datastore.commit()
     else:
         flash_errors(form)
 
