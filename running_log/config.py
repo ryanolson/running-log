@@ -39,7 +39,7 @@ class BaseConfig(object):
     SOCIAL_APP_URL =  'https://tim-miles-running-log.com'
 
     # Sentry
-    # SENTRY_DSN = 
+    SENTRY_DSN = config_secret.SENTRY_DSN
 
     # Mixpanel
     # MIXPANEL_TOKEN = 

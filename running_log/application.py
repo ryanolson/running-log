@@ -11,6 +11,7 @@ from clapp import Clapp
 from flask.ext.security import UserMixin, RoleMixin
 from flask.ext.security import SQLAlchemyUserDatastore
 from flask.ext.social import SQLAlchemyConnectionDatastore
+from raven.contrib.flask import Sentry
 
 from . import config
 from .extensions import db, security, social
@@ -59,7 +60,10 @@ class RunningLog(Clapp):
         self.app.extensions['running_log'] = _RunningLogState(**{
             "datastore": datastore,
         })
-     
+    
+        # Sentry
+        sentry = Sentry(self.app)
+
         # Flask-MongoEngine
         # db.init_app(self.app)
 
