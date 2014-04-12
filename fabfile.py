@@ -42,6 +42,8 @@ def update():
     with env.cd(app_directory):
         env.run("git pull origin develop")
         env.run("git submodule update --init")
+    with prefix('workon running-log'), env.cd(app_directory):
+        env.run("python setup.py develop")
 
 @task 
 def copy_secrets():
