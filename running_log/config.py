@@ -21,16 +21,33 @@ class BaseConfig(object):
     # Flask-Bootstrap3
     USE_CDN = False
 
+    # Flask-Mail
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 465
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = 'tim.miles.running.log@gmail.com'
+    MAIL_PASSWORD = config_secret.MAIL_PASSWORD
+
     # Flask-Security
     SECURITY_CONFIRMABLE = False
     SECURITY_REGISTERABLE = True
+    SECURITY_RECOVERABLE = True
+    SECURITY_CHANGEABLE = True
+    SECURITY_TRACKABLE = True
     SECURITY_FLASH_MESSAGES = True
     SECURITY_POST_CONFIRM_VIEW = '/'
     SECURITY_POST_REGISTER_VIEW = '/'
     SECURITY_POST_LOGIN_VIEW = '/'
     SECURITY_SEND_REGISTER_EMAIL = False
     SECURITY_PASSWORD_HASH = 'bcrypt'
-    SECURITY_PASSWORD_SALT = 'it was in the spring of that year that i calibrated by stride'
+    SECURITY_EMAIL_SENDER = 'tim.miles.running.log@gmail.com'
+
+    SECURITY_PASSWORD_SALT = config_secret.SECURITY_PASSWORD_SALT
+    SECURITY_CONFIRM_SALT = config_secret.SECURITY_CONFIRM_SALT
+    SECURITY_RESET_SALT = config_secret.SECURITY_RESET_SALT
+    SECURITY_LOGIN_SALT = config_secret.SECURITY_LOGIN_SALT
+    SECURITY_REMEBER_SALT = config_secret.SECURITY_REMEBER_SALT
+
 
     SOCIAL_CONNECT_ALLOW_VIEW = '/profile'
     SOCIAL_FACEBOOK = config_secret.CONNECTIONS['facebook']

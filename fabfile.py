@@ -43,4 +43,7 @@ def update():
         env.run("git pull origin develop")
         env.run("git submodule update --init")
 
-
+@task 
+def copy_secrets():
+    app_root_directory = os.path.join(root_directory, 'running-log', 'running_log')
+    put('running_log/config_secret.py', app_root_directory)

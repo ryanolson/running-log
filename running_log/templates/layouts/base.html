@@ -1,6 +1,10 @@
 {% extends "clapp/base.html" %}
 
-{% block title %}Tim Miles Running Log{% endblock %}
+{% block title -%}
+{%- if config['DEBUG'] %}DEBUG: TMRL
+{%- else -%}Tim Miles Running Log
+{%- endif -%}
+{% endblock %}
 
 {% block css %}
 {{ super() }}

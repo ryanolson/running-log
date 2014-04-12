@@ -27,6 +27,7 @@ setup(
         'github3.py',
         'psycopg2',
         'py-bcrypt',
+        'Flask-Mail',
         'Flask-Security',
         'Flask-Social',
         'Flask-SQLAlchemy',

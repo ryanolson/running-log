@@ -1,7 +1,7 @@
 {% set page_title = 'Profile' %}
-{% extends 'layouts/base.html' %}
+{% set active_tab = 'connections' %}
+{% extends 'frontend/profile_base.html' %}
 
-{% from "macros/forms.html" import render_form_group_with_popover_errors as render_field_group %}
 {% macro show_provider_button(provider_id, display_name, conn, show_update_form=True) %}
   <div class="col-xs-12 col-md-6">
     <h2>{{ display_name }}</h2>
@@ -22,43 +22,14 @@
   </div>
 {% endmacro %}
 
-{% block css %}
-{{ super() }}
-<style>
-.img-responsive {
-    display: block;
-    height: auto;
-    max-width: 100%;
-}
-div.tab-content {
-    padding-top: 10px;
-}
-</style>
-{% endblock %}
-
-{% block body %}
-<div class="row">
-    <div class="col-md-2 col-md-offset-1">
-        <img class="img-rounded img-responsive" src="{{ profile_url }}" alt="Profile Picture">
-        <p class="text-center"><small><small><a href="https://en.gravatar.com/" target="_new">Profile Images by Gravatar</a></small></small></p>
+{% block tab_content %}
+<div class="tab-pane active" id="connections">
+    <div class="alert alert-info col-xs-12">
+        The following connections can be used to login without a password.
     </div>
-    <div class="col-md-8">
-
-<ul class="nav nav-tabs">
-  <li class="active"><a href="#connections">Connections</a></li>
-</ul>
-
-<div class="tab-content">
-    <div class="tab-pane active" id="connections">
-        <div class="alert alert-info col-xs-12">
-            The following connections can be used to login without a password.
-        </div>
 
     {# show_provider_button('facebook', 'Facebook', facebook_conn) #}
     {{ show_provider_button('strava', 'Strava', strava_conn) }}
-    </div>
-</div>
-
-    </div>
 </div>
 {% endblock %}
+

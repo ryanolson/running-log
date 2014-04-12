@@ -14,7 +14,7 @@ from flask.ext.social import SQLAlchemyConnectionDatastore
 from raven.contrib.flask import Sentry
 
 from . import config
-from .extensions import db, security, social
+from .extensions import db, security, social, mail
 from .frontend.views import frontend
 from .miles.views import miles
 
@@ -37,6 +37,9 @@ class RunningLog(Clapp):
     
     def configure_extensions(self):
         super(RunningLog, self).configure_extensions()
+
+        # Flask-Mail
+        mail.init_app(self.app)
 
         # Flask-SQLAlchemy
         db.init_app(self.app)
@@ -62,7 +65,8 @@ class RunningLog(Clapp):
         })
     
         # Sentry
-        sentry = Sentry(self.app)
+        if not self.app.debug and not self.app.testing:
+            sentry = Sentry(self.app)
 
         # Flask-MongoEngine
         # db.init_app(self.app)

@@ -18,6 +18,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{current_user.name}} <b class="caret"></b></a>
               <ul class="dropdown-menu">
                   <li><a href="{{ url_for('frontend.profile') }}">Profile</a></li>
+                  <li><a href="{{ url_for('security.change_password') }}">Change Password</a></li>
                   <li class="divider"></li>
                   <li><a href="{{ url_for('security.logout') }}">Logout</a></li>
               </ul>

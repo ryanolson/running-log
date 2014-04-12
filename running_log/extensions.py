@@ -9,6 +9,9 @@
 """
 from clapp.extensions import *
 
+from flask.ext.mail import Mail
+mail = Mail()
+
 from flask.ext.sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 

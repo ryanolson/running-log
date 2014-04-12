@@ -57,6 +57,7 @@ body {
                 {{ login_user_form.remember }} Remember me
             </label>
         </form>
+        <a href="{{ url_for('security.forgot_password') }}">Forgot your password?</a>
     </div>
     <div class="tab-pane fade" id="login-social">
         <div class="well">
