@@ -17,10 +17,12 @@ from . import config
 from .extensions import db, security, social, mail
 from .frontend.views import frontend
 from .miles.views import miles
+from .groups.views import groups
 
 BLUEPRINTS = (
     frontend,
     miles,
+    groups,
 )
 
 DOCUMENTS = (

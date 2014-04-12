@@ -1,34 +1,51 @@
 {% set page_title = 'Groups' %}
 {% extends 'layouts/base.html' %}
 
-{% block body %}
+{% macro group_panel(group) %}
+<div class="miles-panel col-md-12 col-lg-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">{{ group.name }}</h2>
+        </div>
+        <div class="panel-body">
+            {{ group.description }}
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% block css %}
+{{ super() }}
+<style>
+.create-group-btn {
+    margin-top: 20px;
+}
+.row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+</style>
 {% endblock %}
 
+{% block body %}
+<div class="row">
+    <div class="pull-right create-group-btn">
+        <a href="#" class="btn btn-default">Create Group</a>
+    </div>
+    <h2>Groups</h2>
+    <hr>
+</div>
 
-{% from "macros/js.html" import form_async_data %}
+<div class="row">
+    {% for group in groups.items %}
+    {{ group_panel(group) }}
+    {% endfor %}
+</div>
+{% endblock %}
+
 
 {% block js_btm %}
 {{ super() }}
 <script>
-$('.panel-body').click(function() {
-    $('.modal-title').text($(this).attr('day'));
-    $('input#date').attr('value', $(this).attr('id'));
-    $('input#miles').attr('value', parseInt($(this).text()));
-    if($(this).is("[editable]")) {
-        $('#run_entry_dialog').modal('show');
-    }
-});
-$('#run_entry_dialog').on('hidden.bs.modal', function (e) {
-    $('.alert').alert('close');
-})
-{% call form_async_data() %}
-    var $next = $(data).find('#next').attr('value');
-    if($next) {
-        window.location.replace($next);
-    }
-    var $target_body = $($target.find('.modal-body'));                                                                                                                                                     
-    var $data_body = $($(data).find('.modal-body'));
-    $target_body.html($data_body.html());
-{% endcall %}
 </script>
 {% endblock %}

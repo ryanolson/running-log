@@ -56,6 +56,10 @@ class RunningLogDatastore(object):
     def create_or_update_run(self, **kwargs):
         raise NotImplementedError
 
+    def public_groups(self, page=0, per_page=20, error_out=True):
+        raise NotImplementedError
+        self.group_model.query.filter
+
 
 class SQLAlchemyRunningLogDatastore(SQLAlchemyDatastore, RunningLogDatastore):
 
@@ -104,5 +108,18 @@ class SQLAlchemyRunningLogDatastore(SQLAlchemyDatastore, RunningLogDatastore):
             run.date = date.date()
         run.miles = kwargs['miles']
         self.put(run)
+
+    def find_group(self, **kwargs):
+        return self.group_model.query.filter_by(**kwargs).first()
+
+    def public_groups_query(self):
+        return self.group_model.query.\
+                filter(self.group_model.public == True).\
+                order_by(self.group_model.name)
+
+    def public_groups_paginated(self, page=0, per_page=20, error_out=True):
+        return self.public_groups_query().\
+                paginate(page, per_page=per_page, error_out=error_out)
+
 
 

@@ -79,3 +79,4 @@ def run():
     return render_template('miles/run_entry_dialog.html',
             run_entry_form=form)
 
+

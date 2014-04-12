@@ -133,11 +133,14 @@ class GroupRuns(GroupRunsByDate, DefaultToThisWeek):
 
 class JohnnieCCRuns(GroupRunsByDate, DefaultToThisWeek):
 
-    def __init__(self, user, start_date=None, end_date=None):
+    def __init__(self, user, start_date=None, end_date=None, all_years=None):
         GroupRunsByDate.__init__(self, start_date=start_date, end_date=end_date)
         DefaultToThisWeek.__init__(self, start_date=start_date, end_date=end_date)
-        runs = _datastore.johnnie_cc_runs(user, self.start_date, self.end_date)
+        runs = _datastore.johnnie_cc_runs(user, self.start_date, self.end_date, 
+                all_years=all_years)
+        self._users_by_year = collections.defaultdict(set)
         for run in runs:
             self.add_run(run)
-
+            key = "{0}, {1}".format(run.user.last_name, run.user.first_name)
+            self._users_by_year[str(run.user.graduation_year)].add(key)
 

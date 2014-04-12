@@ -99,10 +99,9 @@ class Group(db.Model):
     __tablename__ = "groups"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), unique=True)
+    name = db.Column(db.String(64))
     description = db.Column(db.String(255))
-    listed = db.Column(db.Boolean, default=True)
-    public = db.Column(db.Boolean, default=False)
+    public = db.Column(db.Boolean, default=True)
     request_access = db.Column(db.Boolean, default=True)
 
 

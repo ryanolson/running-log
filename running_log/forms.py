@@ -30,6 +30,7 @@ class ExtendedRegisterForm(RegisterForm):
             flash_errors(self)
         return rv
 
+
 class RunEntryForm(Form, NextFormMixin):
     date = HiddenField()
     miles = IntegerField('Miles', [NumberRange(min=0, max=50)], default=0)
@@ -49,3 +50,13 @@ class RunEntryForm(Form, NextFormMixin):
 
     def to_dict(self):
         return dict(miles=self.miles.data, date=self.date.data)
+
+
+class CreateGroupForm(Form):
+    name = TextField('Name', [Required()])
+    description = TextField('Description', [Required()])
+    public = BooleanField('Public', default=True)
+    request_access = BooleanField('Request Access', default=True)
+    submit = SubmitField('Create')
+
+

@@ -1,5 +1,7 @@
 {% set page_title = 'Miles' %}
 {% extends 'layouts/base.html' %}
+{% from 'macros/running_log.html' import group_runs_table %}
+
 
 {% macro miles_panel(header, miles, footer, id=None, day=None, category=None, editable=True) %}
 <div class="miles-panel col-xs-3 col-sm-1">
@@ -21,13 +23,6 @@
 {{ miles_panel(day.format('ddd'), miles, day.format('M/D'), id=day.format('YYYY-MM-DD'), day=day.format('dddd MMMM D, YYYY'), category=category, editable=editable) }}
 {% endmacro %}
 
-{% macro miles_for_day_td(user_runs, day, today) %}
-{% if day <= today %}
-    <td class="td-center col-sm-1">{{ user_runs.miles_for_date(day)|default('0') }}</td>
-{% else %}
-    <td class="td-center col-sm-1">--</td>
-{% endif %}
-{% endmacro %}
 
 {% block css %}
 {{ super() }}
@@ -98,60 +93,15 @@ input#submit {
 <div class="row">
     <div class="col-sm-10 col-sm-offset-1 col-xs-12">
 
-<h3>Johnnie CC <small>{{ current_user.graduation_year - 3 }} - {{ current_user.graduation_year + 3}}</small></h3>
+        <h3><a href="{{ url_for('groups.johnnie_cc') }}">Johnnie CC</a> <small>{{ current_user.graduation_year - 3 }} - {{ current_user.graduation_year + 3}}</small></h3>
 <hr>
 
-<div class="table-responsive">
-  <table class="table table-hover">
-    <thead><tr>
-        <th class="col-sm-2">Name</th>
-        {% for day in this_week %}
-            <th class="td-center col-sm-1">{{ day.format('ddd') }}</th>
-        {% endfor %}
-        <th class="td-center col-sm-2">Total</th> 
-    </tr></thead>
-    <tbody>
-    {% for key, user_runs in johnnie_cc_runs._runs_by_user|dictsort %}
-    <tr {% if user_runs.user == current_user %}class="active"{% endif %}>
-        <td class="col-sm-2">{{ key }}</td>
-        {% for day in this_week %}
-            {{ miles_for_day_td(user_runs, day, today=now) }}
-        {% endfor %}
-        <td class="td-center col-sm-2">{{ user_runs.miles_over_range(this_week) }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-</div>
+{{ group_runs_table(current_user, johnnie_cc_runs, now, this_week) }}
 
     </div>
 </div>
 {% endif %}
 
-{% macro group_run_table(runs, range ) %}
-<div class="table-responsive">
-  <table class="table table-hover">
-    <thead><tr>
-        <th class="col-sm-2">Name</th>
-        {% for day in gruns.dates %}
-            <th class="td-center col-sm-1">{{ day.format('ddd') }}</th>
-        {% endfor %}
-        <th class="td-center col-sm-2">Total</th> 
-    </tr></thead>
-    <tbody>
-    {% for user_runs in gruns %}
-    <tr {% if user_runs.user == current_user %}class="info"{% endif %}>
-        <td class="col-sm-2">{{ user_runs.user.last_name }}, {{ user_runs.user.first_name }}</td>
-        {% for day in this_week %}
-            {{ miles_for_day_td(user_runs, day, today=now) }}
-        {% endfor %}
-        <td class="td-center col-sm-2">{{ user_runs.total_miles }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-</div>
-{% endmacro %}
 
 <!-- Modal Dialog(s) -->
 {{ run_entry_dialog|safe }}
