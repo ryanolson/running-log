@@ -56,7 +56,5 @@ def list(page=None):
 def johnnie_cc():
     today = rltime.now()
     group_runs = miles_models.JohnnieCCRuns(current_user, all_years=True)
-    from pprint import pprint
-    pprint(vars(group_runs))
     return render_template('groups/johnnie_cc.html', group_runs=group_runs,
             today=today, this_week=today.this_week)
