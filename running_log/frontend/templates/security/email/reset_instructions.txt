@@ -1,0 +1,7 @@
+{{ user.first_name|title }},
+
+As requested, here is your link to reset your password at Tim-Miles-Running-Log.com:
+
+{{ reset_link }}
+
+- Johnnie CC

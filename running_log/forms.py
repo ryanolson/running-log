@@ -8,20 +8,20 @@
     :license: GPLv3, see LICENSE for more details.
 """
 from flask.ext.wtf import Form
-from flask_security.forms import RegisterForm
+from flask.ext.security.forms import RegisterForm
 from wtforms.fields import TextField, BooleanField, IntegerField
 from wtforms.fields import HiddenField, DateField
 from wtforms.validators import Required, NumberRange, Optional
 
-from .utils import is_date_editable, editable_range, flash_errors
-
 from .runs.forms import *
+from .utils import flash_errors
 
 class ExtendedRegisterForm(RegisterForm):
     first_name = TextField('First Name', [Required()])
     last_name = TextField('Last Name', [Required()])
     johnnie_cc = BooleanField('Johnnie CC', [Optional()])
-    graduation_year = IntegerField('Graduation Year', [Optional()])
+    graduation_year = IntegerField('Graduation Year', 
+            validators=[Optional(), NumberRange(min=1970, max=2020)])
 
     def validate(self):
         rv = super(ExtendedRegisterForm, self).validate()

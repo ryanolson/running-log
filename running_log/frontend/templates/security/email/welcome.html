@@ -1,0 +1,9 @@
+<p>Wahoo {{ user.first_name|title }}!</p>
+
+<p>You just signing up for the Tim-Miles-Running-Log.com.  Ready to run?</p>
+
+{% if security.confirmable %}
+<p>You can confirm your email ({{ user.email|lower }}) through the link below:</p>
+
+<p><a href="{{ confirmation_link }}">Confirm my account</a>.</p>
+{% endif %}

@@ -12,7 +12,7 @@
 DEBUG = True
 TESTING = False
 
-# Database
+# Database / Flask-SQLAlchemy
 SQLALCHEMY_DATABASE_URI = "postgresql://ryan@127.0.0.1/running_log"
 
 # Flask-Bootstrap3
@@ -25,7 +25,7 @@ MAIL_USE_SSL = True
 MAIL_USERNAME = 'tim.miles.running.log@gmail.com'
 
 # Flask-Security
-SECURITY_CONFIRMABLE = False
+SECURITY_CONFIRMABLE = True
 SECURITY_REGISTERABLE = True
 SECURITY_RECOVERABLE = True
 SECURITY_CHANGEABLE = True
@@ -34,11 +34,11 @@ SECURITY_FLASH_MESSAGES = True
 SECURITY_POST_CONFIRM_VIEW = '/'
 SECURITY_POST_REGISTER_VIEW = '/'
 SECURITY_POST_LOGIN_VIEW = '/'
-SECURITY_SEND_REGISTER_EMAIL = False
+SECURITY_SEND_REGISTER_EMAIL = True
 SECURITY_PASSWORD_HASH = 'bcrypt'
 SECURITY_EMAIL_SENDER = 'tim.miles.running.log@gmail.com'
 
-
+# Flask-Social
 SOCIAL_CONNECT_ALLOW_VIEW = '/profile'
 SOCIAL_APP_URL =  'https://tim-miles-running-log.com'
 

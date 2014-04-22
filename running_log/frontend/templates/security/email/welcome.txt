@@ -1,0 +1,9 @@
+Wahoo {{ user.first_name|title }}!!
+
+You just signing up for the Tim-Miles-Running-Log.com.  Ready to run? 
+
+{% if security.confirmable %}
+You can confirm your email ({{ user.email|lower }}) through the link below:
+
+{{ confirmation_link }}
+{% endif %}

@@ -1,0 +1,10 @@
+Hey {{ user.first_name|title }} -
+
+Just a heads up... Your password at Tim-Miles-Running-Log.com has been changed.
+
+{% if security.recoverable %}
+If you did not change your password, click the link below to reset it.
+{{ url_for_security('forgot_password', _external=True) }}
+{% endif %}
+
+- Johnnie CC
