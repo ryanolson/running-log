@@ -1,0 +1,10 @@
+{% import "bootstrap/macros.html" as bootstrap %}
+
+{% call bootstrap.modal_dialog("run_entry_dialog") %}
+{{ bootstrap.modal_dialog_header("") }}
+{% call bootstrap.modal_dialog_body() %}
+{{ bootstrap.flash_messages() }}
+<div id="run_form">
+</div>
+{% endcall %}
+{% endcall %}

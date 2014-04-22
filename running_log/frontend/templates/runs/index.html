@@ -1,0 +1,141 @@
+{% set page_title = 'Miles' %}
+{% extends 'layouts/base.html' %}
+{% from 'macros/running_log.html' import group_runs_table %}
+
+
+{% macro miles_panel(header, miles, footer, id=None, day=None, category=None, editable=True) %}
+<div class="miles-panel col-xs-3 col-sm-1">
+    <div class="panel {% if category %}panel-{{category}}{% else %}panel-default{% endif %}" {% if editable %}editable{% endif %}>
+        <div class="panel-heading miles-panel-heading">
+            <h3 class="panel-title text-center">{{ header }}</h3>
+        </div>
+        <div class="panel-body miles-panel-body" {% if id and day %}id="{{ id }}" day="{{ day }}"{% endif %} {% if editable %}editable{% endif %}>
+            {{ miles }}
+        </div>
+        <div class="panel-footer miles-panel-footer">
+            {{ footer }}
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro miles_day_panel(day, miles, category=None, editable=True) %}
+{{ miles_panel(day.format('ddd'), miles, day.format('M/D'), id=day.format('YYYY-MM-DD'), day=day.format('dddd MMMM D, YYYY'), category=category, editable=editable) }}
+{% endmacro %}
+
+
+{% block css %}
+{{ super() }}
+<style>
+.miles-panel {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.miles-panel-heading {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.miles-panel-footer {
+    padding-left: 2px;
+    padding-right: 2px;
+    text-align: center;   
+}
+.miles-panel-body {
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: xx-large;
+    text-align: center;   
+}
+div[editable] {
+    cursor: pointer;
+}
+.form-inline {
+    display: inline-block;
+}
+input#submit {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.td-center {
+    text-align: center;   
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="hidden-xs col-sm-2 col-md-2"></div>
+    {% for day in this_week %}
+        {% if day == now %}
+            {{ miles_day_panel(day, runs.miles_for_date(day), category='primary') }}
+        {% elif day < now %}
+            {{ miles_day_panel(day, runs.miles_for_date(day), category='default') }}
+        {% else %}
+            {{ miles_day_panel(day, '--', editable=False) }}
+        {% endif %}
+    {% endfor %}
+    {{ miles_panel('Total', runs.miles_over_range(this_week), 'Week', editable=False) }}
+</div>
+{% if now.weekday() <= 2 %}
+<div class="row">
+    <div class="hidden-xs col-sm-2 col-md-2"></div>
+    {% for day in last_week %}
+        {{ miles_day_panel(day, runs.miles_for_date(day), category='default') }}
+    {% endfor %}
+    {{ miles_panel('Total', runs.miles_over_range(last_week), 'Week', editable=False) }}
+</div>
+{% endif %}
+
+<!-- Groups -->
+{% if current_user.johnnie_cc %}
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1 col-xs-12">
+        <h3><a href="#">Johnnie CC</a> <small>{{ current_user.graduation_year - 3 }} - {{ current_user.graduation_year + 3}}</small></h3>
+        <hr>
+        {{ group_runs_table(current_user, cc_runs, now, this_week) }}
+    </div>
+</div>
+{% endif %}
+
+
+<!-- Modal Dialog(s) -->
+{% include "runs/run_entry_dialog.html" %}
+{% endblock %}
+
+
+
+{% from "macros/js.html" import form_async_data %}
+
+{% block js_btm %}
+{{ super() }}
+<script>
+$('.panel').click(function() {
+    if($(this).is("[editable]")) {
+        $body = $(this).find('.panel-body');
+        $dialog = $('#run_entry_dialog');
+        $dialog.find('.modal-title').text($body.attr('day'));
+        $dialog.modal('show');
+    }
+});
+$('#run_entry_dialog').on('show.bs.modal', function (e) {
+    $.get("{{ url_for('runs.update') }}", function(data) {
+        var $target_body = $('#run_form');
+        $target_body.html(data);
+        $dialog.find('input#date').attr('value', $body.attr('id'));
+        $dialog.find('input#miles').attr('value', parseInt($body.text()));
+    });
+});
+$('#run_entry_dialog').on('hidden.bs.modal', function (e) {
+    $('.alert').alert('close');
+});
+{% call form_async_data() %}
+    var $next = $(data).find('#next').attr('value');
+    if($next) {
+        window.location.replace($next);
+    }
+    $target.html(data);
+{% endcall %}
+</script>
+{% endblock %}

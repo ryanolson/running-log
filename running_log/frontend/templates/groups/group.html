@@ -1,0 +1,22 @@
+{% set page_title = 'Groups' %}
+{% extends 'layouts/base.html' %}
+{% from 'macros/running_log.html' import group_runs_table %}
+
+{% block css %}
+{{ super() }}
+<style>
+</style>
+{% endblock %}
+
+{% block body %}
+<h1>{{ group.name }}</h1>
+<hr>
+{{ group_runs_table(current_user, group_runs, today, week) }}
+{% endblock %}
+
+
+{% block js_btm %}
+{{ super() }}
+<script>
+</script>
+{% endblock %}

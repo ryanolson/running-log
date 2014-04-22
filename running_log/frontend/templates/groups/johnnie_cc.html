@@ -1,0 +1,30 @@
+{% set page_title = 'Groups' %}
+{% extends 'layouts/base.html' %}
+{% from 'macros/running_log.html' import johnnie_cc_table %}
+
+{% block css %}
+{{ super() }}
+<style>
+h2 {
+    margin-top: 50px;
+    margin-bottom: 5px;
+}
+hr {
+    margin-top: 0px;
+}
+.td-center {
+       text-align: center;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+{{ johnnie_cc_table(current_user, group_runs, today, this_week) }}
+{% endblock %}
+
+
+{% block js_btm %}
+{{ super() }}
+<script>
+</script>
+{% endblock %}

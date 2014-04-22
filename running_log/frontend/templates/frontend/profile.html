@@ -1,0 +1,35 @@
+{% set page_title = 'Profile' %}
+{% set active_tab = 'connections' %}
+{% extends 'frontend/profile_base.html' %}
+
+{% macro show_provider_button(provider_id, display_name, conn, show_update_form=True) %}
+  <div class="col-xs-12 col-md-6">
+    <h2>{{ display_name }}</h2>
+    <hr />
+    {% if conn %}
+      <form action="{{ url_for('social.remove_connection', provider_id=conn.provider_id, provider_user_id=conn.provider_user_id) }}?__METHOD_OVERRIDE__=DELETE" method="POST" class="remove-connection">
+        <button type="submit" class="btn btn-danger"><i class="icon-trash icon-white"></i> Remove {{ display_name }} Connection</button>
+      </form>
+    {% else %}
+      <form action="{{ url_for('social.connect', provider_id=provider_id) }}" method="POST" class="create-connection">
+        <fieldset>
+          <div class="control-group">
+            <button type="submit" class="btn btn-success btn-large"><i class="icon-share icon-white"></i> Connect with {{ display_name }}</button>
+          </div>
+        </fieldset>
+      </form>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% block tab_content %}
+<div class="tab-pane active" id="connections">
+    <div class="alert alert-info col-xs-12">
+        The following connections can be used to login without a password.
+    </div>
+
+    {# show_provider_button('facebook', 'Facebook', facebook_conn) #}
+    {{ show_provider_button('strava', 'Strava', strava_conn) }}
+</div>
+{% endblock %}
+

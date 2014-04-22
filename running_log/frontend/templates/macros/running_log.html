@@ -1,0 +1,53 @@
+
+{% macro user_run_row(current_user, user_runs, key, today, week) %}
+<tr {% if user_runs.user == current_user %}class="active"{% endif %}>
+    <td class="col-sm-2">{{ key }}</td>
+    {% for day in week %}
+    <td class="td-center col-sm-1">
+        {% if day <= today %}
+            {{ user_runs.miles_for_date(day)|default('0') }}
+        {% else %}
+            --
+        {% endif %}
+    </td>
+    {% endfor %}
+    <td class="td-center col-sm-2">{{ user_runs.miles_over_range(week) }}</td>
+</tr>
+
+{% endmacro %}
+
+{% macro group_runs_base_table(week) %}
+<div class="table-responsive">                                                                                
+  <table class="table table-hover">
+    <thead><tr>
+        <th class="col-sm-2">Name</th>
+        {% for day in week %}
+            <th class="td-center col-sm-1">{{ day.format('ddd') }}</th>
+        {% endfor %}
+        <th class="td-center col-sm-2">Total</th> 
+    </tr></thead>
+    <tbody>
+    {{ caller() }}
+   </tbody>
+  </table>
+</div>
+{% endmacro %}
+
+{% macro group_runs_table(current_user, group_runs, today, week) %}
+{% call group_runs_base_table(week) %}
+    {% for key, user_runs in group_runs._runs_by_user|dictsort %}
+    {{ user_run_row(current_user, user_runs, key, today, week) }}
+    {% endfor %}
+{% endcall %}
+{% endmacro %}
+
+{% macro johnnie_cc_table(current_user, group_runs, today, week) %}
+{% for year, users in group_runs._users_by_year|dictsort|reverse %}
+<h2>{{year}}</h2><hr>
+{% call group_runs_base_table(week) %}
+    {% for key in users|list|sort %}
+    {{ user_run_row(current_user, group_runs._runs_by_user[key], key, today, week) }}
+    {% endfor %}
+{% endcall %}
+{% endfor %}
+{% endmacro %}

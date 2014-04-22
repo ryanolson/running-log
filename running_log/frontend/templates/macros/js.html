@@ -1,0 +1,21 @@
+
+
+{# Source: https://gist.github.com/havvg/3226804 #}
+{% macro form_async_data() %}
+$('.modal').on('submit','form[data-async]', function(event) {
+    var $form = $(this);
+    var $target = $($form.attr('data-target'));
+
+    $.ajax({
+        type: $form.attr('method'),
+        url: $form.attr('action'),
+        data: $form.serialize(),
+ 
+        success: function(data, status) {
+            {{ caller() }}
+        }
+    }); 
+ 
+    event.preventDefault();
+});
+{% endmacro %}

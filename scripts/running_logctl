@@ -1,0 +1,22 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+    Controller script
+
+    :author: Ryan Olson
+    :copyright: (c) 2013 by Ryan Olson
+    :license: GPLv3, see LICENSE for more details.
+"""
+from flask import current_app
+from flask.ext.script import Manager
+
+from running_log.application import create_app
+
+manager = Manager(create_app)
+
+manager.add_option('-c', '--config', dest="config", required=False,
+                   default='running_log.config.Debug',
+                   help="load app using specified config object")
+
+if __name__ == '__main__':
+    manager.run()

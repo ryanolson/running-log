@@ -1,0 +1,68 @@
+{# should extend the users default base, not clapp base #}
+{% extends "layouts/base.html" %}
+{% from "macros/forms.html" import render_form_group_with_popover_errors as render_field %}
+
+{% block css %}
+{{ super() }}
+<style>
+body {                                                                                                                                                                                                             
+  background-color: #eee;
+}
+.spacer {
+  padding-top: 40px;
+}
+.checkbox {
+    padding-bottom: 10px;
+}
+hr {
+  border-top: 1px solid #676767;
+}
+</style>
+{% endblock %}
+
+{% macro select_field_with_range(id, int_range) %}
+<select class="form-control" name="{{id}}" id={{id}}" value="">
+    <option></option>
+{% for i in int_range %}
+    <option>{{ i }}</option>
+{% endfor %}
+</select>
+{% endmacro %}
+
+
+{% block body %}
+<div class="spacer hidden-xs"></div>
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+        <form class="form well" role="form" method="POST" action="{{ url_for('security.register') }}">
+        {{ register_user_form.hidden_tag() }}
+        {{ render_field(register_user_form.first_name) }}
+        {{ render_field(register_user_form.last_name) }}
+        {{ render_field(register_user_form.email) }}
+        {{ render_field(register_user_form.password) }}
+        {% if register_user_form.password_confirm %}
+        {{ render_field(register_user_form.password_confirm) }}
+        {% endif %}
+        <hr>
+        <div class="form-group">
+            <label for="graduation_year" class="control-label">Graduation Year</label>
+            {{ select_field_with_range("graduation_year", range(2018,1970,-1)) }}
+        </div>
+        <div class="checkbox">
+            <label>
+                {{ register_user_form.johnnie_cc() }} <strong>Ran for Tim Miles @ SJU</strong>
+            </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Register Now</button>
+        </form>
+    </div>
+</div>
+<div class="spacer hidden-xs"></div>
+{% endblock %}
+
+{% block js_btm %}
+{{ super() }}
+<script>
+    $('.input-popover').popover();
+</script>
+{% endblock %} 

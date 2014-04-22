@@ -1,0 +1,51 @@
+{% set page_title = 'Groups' %}
+{% extends 'layouts/base.html' %}
+
+{% macro group_panel(group) %}
+<div class="miles-panel col-md-12 col-lg-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">{{ group.name }}</h2>
+        </div>
+        <div class="panel-body">
+            {{ group.description }}
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% block css %}
+{{ super() }}
+<style>
+.create-group-btn {
+    margin-top: 20px;
+}
+.row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="pull-right create-group-btn">
+        <a href="#" class="btn btn-default">Create Group</a>
+    </div>
+    <h2>Groups</h2>
+    <hr>
+</div>
+
+<div class="row">
+    {% for group in groups.items %}
+    {{ group_panel(group) }}
+    {% endfor %}
+</div>
+{% endblock %}
+
+
+{% block js_btm %}
+{{ super() }}
+<script>
+</script>
+{% endblock %}

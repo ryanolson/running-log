@@ -1,0 +1,16 @@
+{% import "bootstrap/macros.html" as bootstrap %}
+{% from "macros/forms.html" import render_input_field_with_popover_errors as render_input_field %}
+{% from "macros/forms.html" import submit_button %}
+
+{{ bootstrap.flash_messages() }}
+<form role="form" class="form-inline" data-async data-target="#run_form" action="{{ url_for('runs.update') }}" method="POST">
+    {{ run_form.hidden_tag() }}
+    <div class="form-group col-xs-9 col-md-9">
+        {{ run_form.miles.label(class='sr-only') }}
+        <div class="input-group input-group-lg">
+            {{ render_input_field(run_form.miles, cls='text-right', direction='bottom', ignore_errors=True) }}
+            <span class="input-group-addon">miles</span>
+        </div>
+    </div>
+    {{ submit_button(class="btn btn-lg btn-primary col-xs-3 col-md-3") }}
+</form>
