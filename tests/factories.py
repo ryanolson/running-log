@@ -24,6 +24,7 @@ class BaseFactory(Factory):
         db.session.commit()
         return entity
 
+
 class RoleFactory(BaseFactory):
     FACTORY_FOR = Role
     name = 'admin'
@@ -41,5 +42,10 @@ class UserFactory(BaseFactory):
     current_login_ip = '127.0.0.1'
     login_count = 1
     roles = LazyAttribute(lambda _: [RoleFactory()])
+    groups = LazyAttribute(lambda _: [GroupFactory()])
     active = True
 
+
+class GroupFactory(BaseFactory):
+    FACTORY_FOR = Group
+    name = Sequence(lambda n: 'group{0}'.format(n))
