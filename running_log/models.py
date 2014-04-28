@@ -7,5 +7,6 @@
     :copyright: (c) 2013 by Ryan Olson
     :license: GPLv3, see LICENSE for more details.
 """
+from .groups.models import *
 from .runs.models import *
 from .users.models import *
