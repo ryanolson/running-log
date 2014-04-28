@@ -34,6 +34,7 @@ class UserFactory(BaseFactory):
     FACTORY_FOR = User
     email = Sequence(lambda n: 'user{0}@running_log.com'.format(n))
     password = LazyAttribute(lambda a: encrypt_password('password'))
+    confirmed_at = datetime.utcnow()
     last_login_at = datetime.utcnow()
     current_login_at = datetime.utcnow()
     last_login_ip = '127.0.0.1'
