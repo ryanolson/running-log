@@ -45,6 +45,7 @@ def editable_range():
     return (start, end)
 
 def is_date_editable(date):
+    date = get_rldate(date)
     start, end = editable_range()
     if date <= end and date >= start:
         return True

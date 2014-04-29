@@ -7,8 +7,12 @@
     :copyright: (c) 2013 by Ryan Olson
     :license: GPLv3, see LICENSE for more details.
 """
+from .groups.services import GroupService
 from .runs.services import RunService
 from .users.services import UserService
+
+#: An instance of the :class:`GroupService` class
+groups = GroupService()
 
 #: An instance of the :class:`RunService` class
 runs = RunService()

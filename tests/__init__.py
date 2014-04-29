@@ -27,7 +27,7 @@ class RunningLogAppTestCase(FlaskTestCaseMixin, RunningLogTestCase):
         self.user = UserFactory()
 
     def setUp(self):
-        super(RunningLogTestCase, self).setUp()
+        super(RunningLogAppTestCase, self).setUp()
         self.app = self._create_app()
         self.client = self.app.test_client()
         self.app_context = self.app.app_context()
@@ -37,7 +37,7 @@ class RunningLogAppTestCase(FlaskTestCaseMixin, RunningLogTestCase):
         self._create_csrf_token()
 
     def tearDown(self):
-        super(RunningLogTestCase, self).tearDown()
+        super(RunningLogAppTestCase, self).tearDown()
         db.drop_all()
         self.app_context.pop()
 

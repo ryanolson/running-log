@@ -9,7 +9,7 @@
 """
 from ..core import SQLService
 from ..utils import date_filter, get_rldate
-from ..models import Run, User, UserRuns, GroupRuns, CCRuns
+from ..models import Group, Run, User, UserRuns, GroupRuns, CCRuns
 
 class RunService(SQLService):
     __model__ = Run
@@ -18,7 +18,9 @@ class RunService(SQLService):
         return date_filter(user.runs, Run.date, start_date, end_date)
 
     def find_runs_for_group(self, group, start_date, end_date):
-        raise NotImplementedError
+        q = date_filter(Run.query, Run.date, start_date, end_date)
+        q = q.join(User).join(Group, User.groups).filter(Group.id == group.id)
+        return q
 
     def find_runs_for_johnnie_cc(self, user, start_date, end_date, all_years=False):
         q = date_filter(Run.query, Run.date, start_date, end_date)
@@ -34,7 +36,8 @@ class RunService(SQLService):
         return UserRuns(user=user, runs=runs)
 
     def get_group_runs(self, group, start_date, end_date):
-        raise NotImplementedError
+        runs = self.find_runs_for_group(group, start_date, end_date).all()
+        return GroupRuns(runs=runs)
 
     def get_cc_runs(self, user, start_date, end_date, all_years=False):
         runs = self.find_runs_for_johnnie_cc(user, start_date, end_date, 

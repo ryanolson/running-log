@@ -100,7 +100,7 @@ class GroupRuns(Runs):
 
     @property
     def runs_by_user(self):
-        return self._runs_by_user
+        return copy(self._runs_by_user)
 
     @property 
     def user_keys(self):
