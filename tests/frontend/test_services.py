@@ -6,7 +6,6 @@ from running_log import utils
 from .. import factories
 from . import RunningLogFrontendTestCase
 
-
 class TestServices(RunningLogFrontendTestCase):
 
     def test_user_with_runs(self):

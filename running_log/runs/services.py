@@ -8,7 +8,7 @@
     :license: GPLv3, see LICENSE for more details.
 """
 from ..core import SQLService
-from ..utils import date_filter, get_rldate
+from ..utils import date_filter, get_rldate, print_query
 from ..models import Group, Run, User, UserRuns, GroupRuns, CCRuns
 
 class RunService(SQLService):
@@ -19,7 +19,7 @@ class RunService(SQLService):
 
     def find_runs_for_group(self, group, start_date, end_date):
         q = date_filter(Run.query, Run.date, start_date, end_date)
-        q = q.join(User).join(Group, User.groups).filter(Group.id == group.id)
+        q = q.join(Group, User.groups).filter(Group.id == group.id)
         return q
 
     def find_runs_for_johnnie_cc(self, user, start_date, end_date, all_years=False):
