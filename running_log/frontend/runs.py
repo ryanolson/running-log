@@ -51,4 +51,14 @@ def update():
 
     return render_template('runs/run_form.html', run_form=form)
 
+@route(bp, '/history')
+def history():
+    now = rltime.now().floor('day')
+    start = now.replace(weeks=-4).this_week[0]
+    end = now.this_week[-1]
+    
+    return render_template('runs/history.html',
+            now=now,
+            weeks=start.range('week', start, end),
+            runs=services.runs.get_user_runs(current_user, start, end))
 
