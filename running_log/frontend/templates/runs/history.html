@@ -55,6 +55,9 @@
     margin-left: 3px;
     margin-right: 3px;
 }
+.history-bottom {
+    padding-bottom: 30px;
+}
 </style>
 {% endblock %}
 
@@ -78,6 +81,10 @@
     {{ miles_panel('Total', runs.miles_over_range(week.this_week), 'Week', editable=False) }}
 </div>
 {% endfor %}
+<div class="row history-bottom text-center">
+    <a href="{{ url_for('.history', week_count=weeks|count+4) }}" class="btn btn-lg btn-primary">See More Runs</a>
+</div>
+</div>
 
 {% endblock %}
 

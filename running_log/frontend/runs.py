@@ -53,8 +53,13 @@ def update():
 
 @route(bp, '/history')
 def history():
+    try:
+        week_count = int(request.args.get('week_count', 4))
+    except:
+        week_count = 4
+    week_count = week_count-1
     now = rltime.now().floor('day')
-    start = now.replace(weeks=-4).this_week[0]
+    start = now.replace(weeks=-week_count).this_week[0]
     end = now.this_week[-1]
     
     return render_template('runs/history.html',
