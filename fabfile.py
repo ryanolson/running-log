@@ -49,7 +49,7 @@ def update():
 @task 
 def copy_secrets():
     instance_path = os.path.join(root_directory, 'running-log', 'instance')
-    env.run('mkdir -p {0}'.format(instance_path)
+    env.run('mkdir -p {0}'.format(instance_path))
     put('instance/settings.cfg', instance_path)
 
 @task
