@@ -1,0 +1,120 @@
+{% set page_title = 'Miles' %}
+{% extends 'layouts/base.html' %}
+{% from 'macros/running_log.html' import group_runs_table %}
+
+
+{% macro miles_panel(header, miles, footer, id=None, day=None, category=None, editable=True, headers=True) %}
+<div class="miles-div col-xs-3 col-sm-1">
+    <div class="panel {% if category %}panel-{{category}}{% else %}panel-default{% endif %} miles-panel" {% if editable %}editable{% endif %}>
+        {% if headers %}
+        <div class="panel-heading miles-panel-heading">
+            <h3 class="panel-title text-center">{{ header }}</h3>
+        </div>
+        {% endif %}
+        <div class="panel-body miles-panel-body" {% if id and day %}id="{{ id }}" day="{{ day }}"{% endif %} {% if editable %}editable{% endif %}>
+            {{ miles }}
+        </div>
+        <div class="panel-footer miles-panel-footer">
+            {{ footer }}
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro miles_day_panel(day, miles, category=None, editable=True, headers=True) %}
+{{ miles_panel(day.format('ddd'), miles, day.format('M/D'), id=day.format('YYYY-MM-DD'), day=day.format('dddd MMMM D, YYYY'), category=category, editable=editable, headers=headers) }}
+{% endmacro %}
+
+{% macro miles_compare_day_panel(day, miles, category=None, editable=True, headers=True) %}
+{{ miles_panel(day.format('ddd'), miles, day.format('M/D'), id=day.format('YYYY-MM-DD'), day=day.format('dddd MMMM D, YYYY'), category=category, editable=editable, headers=headers) }}
+{% endmacro %}
+
+{% macro miles_week(week, runs, other_runs, now, is_first) %}
+<div class="row history-row">
+    <div class="hidden-xs col-sm-2 col-md-2"></div>                                                                                           
+    {% for day in week.this_week %}
+    {% if day <= now %}
+        {% if runs.miles_for_date(day) > other_runs.miles_for_date(day) %}
+        {{ miles_day_panel(day, runs.miles_for_date(day), category='success') }}
+        {% else %}
+        {{ miles_day_panel(day, runs.miles_for_date(day), category='default') }}
+        {% endif %}
+    {% else %}
+        {{ miles_day_panel(day, '--', editable=False) }}
+    {% endif %}
+    {% endfor %}
+    {{ miles_panel('Total', runs.miles_over_range(week.this_week), 'Week', editable=False, headers=is_first) }}
+</div>
+{% endmacro %}
+
+{% block css %}
+{{ super() }}
+<style>
+.miles-div {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.miles-panel {
+    margin-bottom: 10px;
+}
+.miles-panel-heading {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.miles-panel-footer {
+    padding-left: 2px;
+    padding-right: 2px;
+    text-align: center;   
+}
+.miles-panel-body {
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: xx-large;
+    text-align: center;   
+}
+.td-center {
+    text-align: center;   
+}
+.history-row {
+    margin-left: 3px;
+    margin-right: 3px;
+}
+.history-bottom {
+    padding-bottom: 30px;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+</div>
+{% for week in weeks|reverse %}
+<div class="visible-xs">
+    <div class="row history-row">
+        <h4>{{week.this_week[0]}} - {{week.this_week[-1]}}</h4>
+    </div>
+</div>
+{{ miles_week(week, runs, other_runs, now, loop.first) }}
+{#
+<div class="row history-row">
+    <div class="hidden-xs col-sm-2 col-md-2"></div>
+    {% for day in week.this_week %}
+        {% if day <= now %}
+            {{ miles_day_panel(day, runs.miles_for_date(day), category='default') }}
+        {% else %}
+            {{ miles_day_panel(day, '--', editable=False) }}
+        {% endif %}
+    {% endfor %}
+    {{ miles_panel('Total', runs.miles_over_range(week.this_week), 'Week', editable=False) }}
+</div>
+#}
+{% endfor %}
+<div class="row history-bottom text-center">
+    <a href="{{ url_for('.compare', user_id=other_runs.user.id, week_count=weeks|count+4) }}" class="btn btn-lg btn-primary">See More Runs</a>
+</div>
+</div>
+
+{% endblock %}
+
+
