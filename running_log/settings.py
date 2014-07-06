@@ -14,6 +14,7 @@ TESTING = False
 
 # Database / Flask-SQLAlchemy
 SQLALCHEMY_DATABASE_URI = "postgresql://ryan@127.0.0.1/running_log"
+SQLALCHEMY_POOL_RECYCLE = 3600
 
 # Flask-Bootstrap3
 USE_CDN = True
@@ -25,7 +26,7 @@ MAIL_USE_SSL = True
 MAIL_USERNAME = 'tim.miles.running.log@gmail.com'
 
 # Flask-Security
-SECURITY_CONFIRMABLE = True
+SECURITY_CONFIRMABLE = False
 SECURITY_REGISTERABLE = True
 SECURITY_RECOVERABLE = True
 SECURITY_CHANGEABLE = True

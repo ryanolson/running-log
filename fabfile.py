@@ -33,7 +33,7 @@ def restart():
         env.run("ps aux | grep running_log")
         with settings(warn_only=True):
             env.run("../scripts/kill_gunicorn")
-        env.run("gunicorn --daemon --name=running_log --pid=gunicorn.running-log.pid --bind 127.0.0.1:12346 --workers 4 running_log.application:create_app\(\)")
+        env.run("gunicorn --daemon --name=running_log --pid=gunicorn.running-log.pid --bind 127.0.0.1:12346 --workers 4 wsgi:application")
         env.run("ps aux | grep running_log")
         env.run("cat gunicorn.running-log.pid")
 

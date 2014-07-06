@@ -16,6 +16,7 @@ from flask.ext.social import SQLAlchemyConnectionDatastore
 from raven.contrib.flask import Sentry
 
 from .core import db, mail, security, social
+from .forms import ExtendedRegisterForm
 from .helpers import register_blueprints
 from .middleware import HTTPMethodOverrideMiddleware
 from .models import User, Role, Connection
@@ -44,7 +45,8 @@ def create_app(package_name, package_path, settings_override=None,
     db.init_app(app)
     mail.init_app(app)
     security.init_app(app, SQLAlchemyUserDatastore(db, User, Role),
-                      register_blueprint=register_security_blueprint)
+                      register_blueprint=register_security_blueprint,
+                      register_form=ExtendedRegisterForm)
     social.init_app(app, SQLAlchemyConnectionDatastore(db, Connection))
 
     # Sentry - only for production 
